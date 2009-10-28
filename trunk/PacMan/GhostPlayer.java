@@ -7,7 +7,13 @@ public class GhostPlayer extends Ghost{
 	
 	GhostPlayer(GameModel gameModel, byte type, int startX, int startY, boolean bMiddle, Color color, int nExitMilliSec) {
 		super(gameModel, type, startX, startY, bMiddle);
+		m_deltaMax = m_ghostDeltaMax;
+	    m_destinationX = -1;
+	    m_destinationY = -1;
 		m_color = color;
+		m_bInsideRoom = true;
+	    m_nExitMilliSec = nExitMilliSec;
+	    m_nTicks2Exit = m_nExitMilliSec / gameModel.m_pacMan.m_delay;
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -282,7 +288,7 @@ public class GhostPlayer extends Ghost{
 
 		   }
 	   
-	   // Overriden to update Pacman's direction
+	   // Overriden to update Ghost's direction
 	   public void tickThing ()
 	   {
 		   //boolean  bBackoff = false;
@@ -305,6 +311,9 @@ public class GhostPlayer extends Ghost{
 			         m_bEaten = false;
 			         return;
 			      }
+			      
+			   
+			      
 			   // If the ghost is located at the door and is ready to enter because
 			      // he was eaten, then let him in.
 			      else if (m_bEaten &&
@@ -326,6 +335,38 @@ public class GhostPlayer extends Ghost{
 			      else setNextDirection (m_direction);
 		         // If the ghost is eaten, it needs to return to the hideout.		         
 		      }
+		   
+		// If the ghost is located at the door and is ready to leave, 
+		      // then let him out.
+		      if (m_bInsideRoom &&
+		          m_locX == m_gameModel.m_doorLocX && 
+		          m_locY == m_gameModel.m_doorLocY + 2 && 
+		          m_deltaLocX == 0 &&
+		          m_deltaLocY == 0 &&
+		          m_nTicks2Exit == 0)
+		      {
+		         m_destinationX = m_locX;
+		         m_destinationY = m_gameModel.m_doorLocY - 1;
+		         m_direction = UP;
+		         m_deltaLocY = -1;
+		         m_bInsideRoom = false;
+		         m_bEnteringDoor = false;
+		         m_bEaten = false;
+		         return;
+		      } 
+		   
+		   
+		// Count down until Ghost can leave Hideout
+		      if (m_nTicks2Exit > 0)
+		      {
+		         m_nTicks2Exit--;
+		         if (m_nTicks2Exit == 0)
+		         {
+		            m_destinationX = -1;
+		            m_destinationY = -1;   
+		         }
+		      }
+		   
 		// Count down until the powerup expires
 		      if (m_nTicks2Flee > 0)
 		      {
@@ -350,7 +391,7 @@ public class GhostPlayer extends Ghost{
 		         m_destinationY = m_gameModel.m_doorLocY + 2;
 		         m_direction = DOWN;
 		      }
-		      if (m_bEaten){
+		      if (m_bEaten || m_bInsideRoom){
 		      // If there is a destination, then check if the destination has been reached.
 		      if (m_destinationX >= 0 && m_destinationY >= 0)
 		      {
