@@ -320,7 +320,7 @@ public class Ghost extends Thing{
 	         targetX = m_gameModel.m_doorLocX;
 	         targetY = m_gameModel.m_doorLocY - 1;
 	         
-	      } /*else {
+	      } else {
 	         // Otherwise, he is outside the door and chasing Pacman   
 	         if (!m_bInsaneAI && m_bCanPredict)
 	         {
@@ -391,20 +391,17 @@ public class Ghost extends Thing{
 	               bestDirection[2] = LEFT;
 	            }    
 	         }
-	      }*/
-	     
-	     /*  // There's a 50% chance that the ghost will try the sub-optimal direction first.
-	      */
-	     /* // This will keep the ghosts from following each other and to trap Pacman.
+	      }
+	      
+	      // There's a 50% chance that the ghost will try the sub-optimal direction first.
+	      // This will keep the ghosts from following each other and to trap Pacman.
 	      if (!m_bInsaneAI && m_bCanUseNextBest && Math.random () < .50)
 	      {  
 	         byte temp = bestDirection[0];
 	         bestDirection[0] = bestDirection[1];
 	         bestDirection[1] = temp;
 	      }
-	    */
-	      /*
-	      
+	                  
 	      // If the ghost is fleeing and not eaten, then reverse the array of best directions to go.
 	      if (bBackoff || (m_nTicks2Flee > 0 && !m_bEaten))
 	      {
@@ -474,10 +471,65 @@ public class Ghost extends Thing{
 	            
 	         }
 	      } 
-	      */
+	      
 	      // REMOVE
 	      //if (m_gameModel.m_ghosts[0] == this)
 	      //   System.out.println (m_direction + " " + targetX + " " + targetY);
+	   }
+	   
+	   // This method returns true if this ghost is traveling to the same
+	   // destination with the same direction as another ghost.
+	   boolean isFollowing ()
+	   {
+	      boolean bFollowing = false;
+	      double  dRandom;
+	   
+	      // If the ghost is in the same location as another ghost
+	      // and moving in the same direction, then they are on
+	      // top of each other and should not follow.
+	      for (int i = 0; i < m_gameModel.m_ghosts.length; i++)
+	      {
+	         // Ignore myself
+	         if (this == m_gameModel.m_ghosts[i])
+	            continue;
+	         
+	         if (m_gameModel.m_ghosts[i].m_locX == m_locX &&
+	             m_gameModel.m_ghosts[i].m_locY == m_locY &&
+	             m_gameModel.m_ghosts[i].m_direction == m_direction)
+	         {
+	            return true;
+	         }
+	      }
+	      
+	      // This will allow ghosts to often
+	      // clump together for easier eating
+	      dRandom = Math.random ();
+	      if (!m_bInsaneAI && dRandom < .90)
+	      {  
+	         //if (m_bInsaneAI && dRandom < .25)
+	         //   return false;
+	         //else
+	            return false;
+	      }
+	      
+	      // If ghost is moving to the same location and using the
+	      // same direction, then it is following another ghost.
+	      for (int i = 0; i < m_gameModel.m_ghosts.length; i++)
+	      {
+	         // Ignore myself
+	         if (this == m_gameModel.m_ghosts[i])
+	            continue;
+	         
+	         if (m_gameModel.m_ghosts[i].m_destinationX == m_destinationX &&
+	             m_gameModel.m_ghosts[i].m_destinationY == m_destinationY &&
+	             m_gameModel.m_ghosts[i].m_direction == m_direction)
+	         {
+	            bFollowing = true;
+	            break;
+	         }
+	      }
+	      
+	      return bFollowing;
 	   }
 
 }
