@@ -531,5 +531,66 @@ public class Ghost extends Thing{
 	      
 	      return bFollowing;
 	   }
-
+	   
+	// This method will check if the bounding box of this ghosts intersects with
+	   // the bound box of the player.  If so, then either kill the player or eat the 
+	   // fleeing ghost
+	   // return: 0 for no collision, 1 for ate a ghost, 2 for pacman died
+	   public int checkCollision (Player player)
+	   {
+	      Rectangle intersectRect;
+	      intersectRect = m_boundingBox.intersection (player.m_boundingBox);
+	      if (!intersectRect.isEmpty ())
+	      {
+	         // If the ghost is not fleeing and is not eaten,
+	         // then Pacman was caught.
+	         if (m_nTicks2Flee == 0 && !m_bEaten)
+	         {
+	            player.m_direction = Thing.STILL;
+	            return 2;
+	            
+	         } else if (m_nTicks2Flee > 0 && !m_bEaten)
+	         {
+	            // If the ghost was fleeing and is not eaten,
+	            // then Pacman caught the Ghost.
+	            player.m_score += m_gameModel.m_eatGhostPoints;
+	            m_eatenPoints = m_gameModel.m_eatGhostPoints;
+	            // TODO: Remove
+	            //System.out.println (m_gameModel.m_eatGhostPoints);
+	            m_gameModel.m_eatGhostPoints *= 2;
+	            m_bEaten = true;
+	            m_destinationX = -1;
+	            m_destinationY = -1;
+	            // Boost speed of dead ghost
+	            // to make the eyes get back to the hideout faster
+	            m_deltaMax = 2;
+	            // Pause the game to display the points for eating this ghost.
+	            m_gameModel.setPausedGame (true);
+	            m_nTicks2Popup = 500 / m_gameModel.m_pacMan.m_delay; 
+	            player.setVisible (false);
+	            return 1;
+	         }
+	      }  
+	      return 0;
+	      
+	   }
+	   // This is called each time the game is restarted
+	   public void returnToStart ()
+	   {
+	      super.returnToStart ();
+	      m_destinationX = -1;
+	      m_destinationY = -1;
+	      // First ghost always starts outside of room
+	      if (m_gameModel.m_ghosts[0] == this)
+	         m_bInsideRoom = false;
+	      else
+	         m_bInsideRoom = true;
+	      
+	      m_nTicks2Exit = m_nExitMilliSec / m_gameModel.m_pacMan.m_delay;
+	      m_deltaMax = m_ghostDeltaMax;
+	      m_nTicks2Flee = 0;  
+	      m_bEaten = false;
+	      m_nTicks2Popup = 0;
+	      m_bEnteringDoor = false;
+	   }
 }

@@ -293,6 +293,9 @@ public class GhostPlayer extends Ghost{
 	   {
 		   //boolean  bBackoff = false;
 		   byte prevDirection = STILL;
+		   
+		
+		   
 		   if (m_bEaten || m_bInsideRoom)
 		      {
 			   // If the ghost has entered the room and was just eaten,
@@ -333,7 +336,19 @@ public class GhostPlayer extends Ghost{
 			         return;
 			      }
 			      else setNextDirection (m_direction, false);
-		         // If the ghost is eaten, it needs to return to the hideout.		         
+		         // If the ghost is eaten, it needs to return to the hideout.
+			      
+			   // Count down for how long the Points for eating the Ghost popup
+			      if (m_nTicks2Popup > 0)
+			      {
+			         m_nTicks2Popup--;
+			         if (m_nTicks2Popup == 0)
+			         {
+			            m_gameModel.setPausedGame (false);      
+			            m_gameModel.m_player.setVisible (true);
+			            m_gameModel.m_pacMan.m_soundMgr.playSound (SoundManager.SOUND_RETURNGHOST);
+			         }
+			      }
 		      }
 		   
 		// If the ghost is located at the door and is ready to leave, 
@@ -465,67 +480,5 @@ public class GhostPlayer extends Ghost{
 		         m_direction = m_requestedDirection;
 		   }
 	   }
-	   
-	
-	   
-	
-	   
-	   
-	   public int checkCollision (Player player)
-	   {
-	      Rectangle intersectRect;
-	      intersectRect = m_boundingBox.intersection (player.m_boundingBox);
-	      if (!intersectRect.isEmpty ())
-	      {
-	         // If the ghost is not fleeing and is not eaten,
-	         // then Pacman was caught.
-	         if (m_nTicks2Flee == 0 && !m_bEaten)
-	         {
-	            player.m_direction = Thing.STILL;
-	            return 2;
-	            
-	         } else if (m_nTicks2Flee > 0 && !m_bEaten)
-	         {
-	            // If the ghost was fleeing and is not eaten,
-	            // then Pacman caught the Ghost.
-	            player.m_score += m_gameModel.m_eatGhostPoints;
-	            m_eatenPoints = m_gameModel.m_eatGhostPoints;
-	            // TODO: Remove
-	            //System.out.println (m_gameModel.m_eatGhostPoints);
-	            m_gameModel.m_eatGhostPoints *= 2;
-	            m_bEaten = true;
-	            m_destinationX = -1;
-	            m_destinationY = -1;
-	            // Boost speed of dead ghost
-	            // to make the eyes get back to the hideout faster
-	            m_deltaMax = 2;
-	           //TODO: // Pause the game to display the points for eating this ghost.
-	            		//m_gameModel.setPausedGame (true);
-	            		//m_nTicks2Popup = 500 / m_gameModel.m_pacMan.m_delay; 
-	            		//player.setVisible (false);
-	            return 1;
-	         }
-	      }  
-	      return 0;
-	      
-	   }
-	   public void returnToStart ()
-	   {
-		      super.returnToStart ();
-		      m_destinationX = -1;
-		      m_destinationY = -1;
-		      // First ghost always starts outside of room
-		      if (m_gameModel.m_ghosts[0] == this)
-		         m_bInsideRoom = false;
-		      else
-		         m_bInsideRoom = true;
-		      
-		      m_nTicks2Exit = m_nExitMilliSec / m_gameModel.m_pacMan.m_delay;
-		      m_deltaMax = m_ghostDeltaMax;
-		      m_nTicks2Flee = 0;  
-		      m_bEaten = false;
-		      m_nTicks2Popup = 0;
-		      m_bEnteringDoor = false;
-		   }
 	
 }
