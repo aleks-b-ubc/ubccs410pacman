@@ -45,7 +45,7 @@ public class GameModel
    static final int  STATE_PAUSED         = 8;  // Used paused the game
    static final int  STATE_INTRO          = 9;  // Intro to game with nice JPEG banner
    static final int  STATE_ABOUT          = 10; // About page  
-   //TODO: REmember to maybe get rid of this if it's not needed.
+   
    
    
    int[][]        m_gameState;            // Represents maze as integers
@@ -66,9 +66,10 @@ public class GameModel
    int            m_doorLocY     = 12;    // Bad.. Hard code location of door
    
    
+   //TODO: This is where the multiplayer stuff lies
    //Variables for Multiplayer
-   int 			  numberPlayers; //Number of human players
-   boolean		  multiplayer;   //Is set to true of the game is multiplayer.
+   int 			  numberPlayers  = 1;     //Number of human players
+   boolean		  multiplayer    = false; //Is set to true of the game is multiplayer.
       
    // Variables for Powerup
    int            m_nTicksPowerup;        // Number of ticks power up lasts.

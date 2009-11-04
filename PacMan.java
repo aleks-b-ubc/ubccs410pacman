@@ -565,8 +565,10 @@ class pacManKeyAdapter extends KeyAdapter{
             }
             break;
             
+      //K is for ABOUT      
       case KeyEvent.VK_K:            m_pacMan.m_gameModel.m_state = GameModel.STATE_ABOUT;            m_pacMan.m_gameModel.m_nTicks2AboutShow = 0;            break;
-                  case KeyEvent.VK_V:            m_pacMan.m_soundMgr.m_bEnabled = !m_pacMan.m_soundMgr.m_bEnabled;            if (m_pacMan.m_soundMgr.m_bEnabled == false)
+            
+      //V is for SOUND      case KeyEvent.VK_V:            m_pacMan.m_soundMgr.m_bEnabled = !m_pacMan.m_soundMgr.m_bEnabled;            if (m_pacMan.m_soundMgr.m_bEnabled == false)
                m_pacMan.m_soundMgr.stop ();
             m_pacMan.m_bottomCanvas.repaint ();            break;
              

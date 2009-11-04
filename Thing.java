@@ -203,8 +203,3 @@ public class Thing
       return true;
    }
 }
-   
-
-
-
-
