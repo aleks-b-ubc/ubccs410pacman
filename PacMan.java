@@ -4,6 +4,7 @@ import java.applet.*;
 import java.awt.event.*;
 import java.lang.Math;
 
+@SuppressWarnings("serial")
 public class PacMan extends Applet
 {
    GameModel      m_gameModel;
@@ -26,23 +27,23 @@ public class PacMan extends Applet
       m_topCanvas = new TopCanvas (m_gameModel, 200, 200);
       m_bottomCanvas = new BottomCanvas (this, m_gameModel, 200, 250);
        
-      GridBagLayout gridBag = new GridBagLayout ();
-      GridBagConstraints c = new GridBagConstraints ();
+      GridBagLayout gridBagLayout = new GridBagLayout ();
+      GridBagConstraints constraints = new GridBagConstraints ();
       
-      setLayout (gridBag);
+      setLayout (gridBagLayout);
             
-      c.gridwidth = 1;
-      c.gridheight = 3;
+      constraints.gridwidth = 1;
+      constraints.gridheight = 3;
       
-      gridBag.setConstraints (m_gameUI, c);
+      gridBagLayout.setConstraints (m_gameUI, constraints);
       add (m_gameUI);
       
-      c.gridwidth = GridBagConstraints.REMAINDER;
-      c.gridheight = 1;
-      gridBag.setConstraints (m_topCanvas, c);
+      constraints.gridwidth = GridBagConstraints.REMAINDER;
+      constraints.gridheight = 1;
+      gridBagLayout.setConstraints (m_topCanvas, constraints);
       add (m_topCanvas);
       
-      gridBag.setConstraints (m_bottomCanvas, c);
+      gridBagLayout.setConstraints (m_bottomCanvas, constraints);
       add (m_bottomCanvas);
       
       requestFocus ();      // Add event subscribers
@@ -541,9 +542,20 @@ class pacManKeyAdapter extends KeyAdapter{
 			   break;
             case KeyEvent.VK_DOWN:
 				m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.DOWN;            break;      
-      case KeyEvent.VK_N:            m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
+      case KeyEvent.VK_N:
+    	  	//make sure we DO NOT carry over multiplayer state accidently
+    	    //as such we set multiplayer as false
+    	  	m_pacMan.m_gameModel.multiplayer = false;            m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
             m_pacMan.m_gameUI.m_bDrawPaused = false;
-            break;            case KeyEvent.VK_P:            if (m_pacMan.m_gameModel.m_state == GameModel.STATE_GAMEOVER)
+            break;
+            
+      case KeyEvent.VK_M:
+    	  	//set multiplayer as true.
+    	  	m_pacMan.m_gameModel.multiplayer = true;
+    	  	m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
+    	  	m_pacMan.m_gameUI.m_bDrawPaused = false;
+    	  	break;
+                        case KeyEvent.VK_P:            if (m_pacMan.m_gameModel.m_state == GameModel.STATE_GAMEOVER)
                break;
                         if (m_pacMan.m_gameModel.m_state == GameModel.STATE_PAUSED)            {               m_pacMan.m_gameModel.m_state = m_pacMan.m_gameModel.m_pausedState;
                m_pacMan.m_gameUI.m_bDrawPaused = false;
@@ -554,7 +566,7 @@ class pacManKeyAdapter extends KeyAdapter{
             break;
             
       case KeyEvent.VK_K:            m_pacMan.m_gameModel.m_state = GameModel.STATE_ABOUT;            m_pacMan.m_gameModel.m_nTicks2AboutShow = 0;            break;
-                  case KeyEvent.VK_M:            m_pacMan.m_soundMgr.m_bEnabled = !m_pacMan.m_soundMgr.m_bEnabled;            if (m_pacMan.m_soundMgr.m_bEnabled == false)
+                  case KeyEvent.VK_V:            m_pacMan.m_soundMgr.m_bEnabled = !m_pacMan.m_soundMgr.m_bEnabled;            if (m_pacMan.m_soundMgr.m_bEnabled == false)
                m_pacMan.m_soundMgr.stop ();
             m_pacMan.m_bottomCanvas.repaint ();            break;
              

@@ -44,7 +44,8 @@ public class GameModel
    static final int  STATE_NEWGAME        = 7;  // Initialization of a new game
    static final int  STATE_PAUSED         = 8;  // Used paused the game
    static final int  STATE_INTRO          = 9;  // Intro to game with nice JPEG banner
-   static final int  STATE_ABOUT          = 10; // About page
+   static final int  STATE_ABOUT          = 10; // About page  
+   //TODO: REmember to maybe get rid of this if it's not needed.
    
    
    int[][]        m_gameState;            // Represents maze as integers
@@ -63,6 +64,11 @@ public class GameModel
    int            m_nextFreeUp   = 10000; // Every this many points, earn another life
    int            m_doorLocX     = 13;    // Bad.. Hard code location of door
    int            m_doorLocY     = 12;    // Bad.. Hard code location of door
+   
+   
+   //Variables for Multiplayer
+   int 			  numberPlayers; //Number of human players
+   boolean		  multiplayer;   //Is set to true of the game is multiplayer.
       
    // Variables for Powerup
    int            m_nTicksPowerup;        // Number of ticks power up lasts.
@@ -103,8 +109,17 @@ public class GameModel
       // Ghosts and Pacman
       m_player = new Player (this, Thing.PACMAN, 13, 23, true);
       m_ghosts = new Ghost[4];
-      m_ghostPlayer = new GhostPlayer (this, Thing.GHOST, 13, 11, true, Color.red, 0);
-      m_ghosts[0] = m_ghostPlayer;
+      
+      //If the game is going to be multiplayer, we set the ghost as human. Else it's 
+      //an AI.
+      if(multiplayer){
+    	  m_ghostPlayer = new GhostPlayer (this, Thing.GHOST, 13, 11, true, Color.red, 0);
+          m_ghosts[0] = m_ghostPlayer;
+      }
+      else{
+    	  m_ghosts[0] = new GhostAI (this, Thing.GHOST, 13, 11, true, Color.red, 0);
+      }
+        
       m_ghosts[1] = new GhostAI (this, Thing.GHOST, 12, 14, false, Color.pink, 2000);
       m_ghosts[2] = new GhostAI (this, Thing.GHOST, 13, 14, true, Color.cyan, 4000); 
       m_ghosts[3] = new GhostAI (this, Thing.GHOST, 15, 14, false, Color.orange, 6000); 
