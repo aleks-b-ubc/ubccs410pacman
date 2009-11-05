@@ -116,7 +116,8 @@ class Player extends Thing
             m_degreeRotation = 270;
             break;
       }
-            g2.setColor (Color.yellow);      
+      
+      //TODO: NOTE THIS IS WHERE COLOUR IS SET!      g2.setColor (Color.green);      
       // Draw Pacman Chomping      if (!m_bDrawDead)      {
          g2.fillArc ((int)(pacManX + deltaPixelX), (int)(pacManY + deltaPixelY), pacManDiameter, pacManDiameter, m_degreeRotation + m_mouthDegree, 200);
          g2.fillArc ((int)(pacManX + deltaPixelX), (int)(pacManY + deltaPixelY), pacManDiameter, pacManDiameter, m_degreeRotation - m_mouthDegree, -200);      
