@@ -17,6 +17,8 @@ class BottomCanvas extends Canvas
    Image       m_offImage;
    Graphics    m_offGraphics;
    Dimension   m_offDim;
+   
+   Color pacmanColor = Color.yellow; //changes as the pacman character changes color
 
 	public BottomCanvas (PacMan pacMan, GameModel gameModel, int width, int height)
    {
@@ -24,7 +26,7 @@ class BottomCanvas extends Canvas
       setSize (width, height);
 		m_gameModel = gameModel;
       m_pacMan = pacMan;
-      m_font = new Font ("Helvetica", Font.BOLD, 18);
+      m_font = new Font ("Helvetica", Font.BOLD, 14);
 	}
 
 	public void update(Graphics g)
@@ -65,7 +67,7 @@ class BottomCanvas extends Canvas
 		m_offGraphics.drawString (stageString, x, y);
       
       y += fm.getAscent() + fm.getDescent();
-      m_offGraphics.setColor (Color.yellow);
+      m_offGraphics.setColor (pacmanColor);
 		for (int i = 0; i < m_gameModel.m_nLives; i++)
       {
          m_offGraphics.fillArc (x, y, (int)pacManDiameter, (int)pacManDiameter, 45, 200);
@@ -98,11 +100,18 @@ class BottomCanvas extends Canvas
          m_offGraphics.drawString ("\'V\' for No Sound", x, y);
       else
          m_offGraphics.drawString ("\'V\' for Sound", x, y);
+      
+      y += fm.getAscent() + fm.getDescent();
+      m_offGraphics.drawString ("\'H\' for High Scores", x, y);
    
       //y += fm.getAscent() + fm.getDescent();
       //m_offGraphics.drawString ("\'I\'  for Insane AI", x, y);
       
       // buffer to front
 		g.drawImage (m_offImage, 0, 0, this);
+	}
+	
+	public void setPacManColor(Color newColor){
+		pacmanColor = newColor;
 	}
 }

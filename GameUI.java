@@ -28,7 +28,8 @@ public class GameUI extends Canvas
    Font        m_font;              // Font for Ghost points string and About page   Font        m_readyFont;         // Font for "Ready", "GameOver" and "Paused" strings   Font        m_readyFontItalic;   // Font for "!!" bang in Ready string
    boolean     m_bRedrawAll = false;   // Set to true to tell Update to Paint
    boolean     m_bDrawReady = false;   int         m_gridInset;         // Starting painting the maze with this offset   boolean     m_bFlipWallColor  = false;   boolean     m_bDrawGameOver   = false;   boolean     m_bDrawPaused     = false;   boolean     m_bShowColor      = false;
-   boolean     m_bShowMultiplayer = false;   Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
+   boolean     m_bShowMultiplayer = false;
+   boolean     m_bShowHighScore = false;   Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
       // Variables associated with the intro page   boolean     m_bShowIntro      = true;
    Color pacmanColour = Color.yellow; //This is the default color for packman   
    
@@ -138,6 +139,11 @@ public class GameUI extends Canvas
     	  return;
       }
       
+      if(m_bShowHighScore){
+    	  paintHighScores(g);
+    	  return;
+      }
+      
       m_offGraphics.setColor (Color.blue);
       
       // Draw from left to right
@@ -173,7 +179,7 @@ public class GameUI extends Canvas
       g.drawImage (m_offImage, 0, 0, this); 
    }
    
-   public void paintMultiplayer(Graphics g) {
+   private void paintHighScores(Graphics g) {
 	   int         x             = 0;
 	      int         y             = 0;
 	      int         width         = 0;
@@ -199,10 +205,41 @@ public class GameUI extends Canvas
 	      m_offGraphics.setColor (Color.white);
 	      x = 10;
 	      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
-	      m_offGraphics.drawString ("Welcome to PAC-MAN in Java!", x, y);
 	      
+	      m_offGraphics.drawString ("HIGH SCORES", x, y);
+	       
+	      // Blitz buffer to screen
+	      g.drawImage (m_offImage, 0, 0, this); 
+	
+}
+
+public void paintMultiplayer(Graphics g) {
+	   	  int         x             = 0;
+	      int         y             = 0;
+	      int         width         = 0;
+	      int         stringLength  = 0;
+	      FontMetrics fm;
 	      
-	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.setColor (Color.black);
+	      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
+	      if (m_imagePacman == null)
+	      {
+	         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+	      }
+	      
+	      // Draw Logo Image
+	      y = 50;
+	      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+	      m_offGraphics.drawImage (m_imagePacman, x, y, this);
+	      
+	      m_offGraphics.setFont (m_font);
+	      m_offGraphics.setColor (Color.white);
+	      fm = m_offGraphics.getFontMetrics();
+	      
+	      m_offGraphics.setColor (Color.white);
+	      x = 10;
+	      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
+	      
 	      m_offGraphics.drawString ("This is the Multiplayer screen!", x, y);
 	       
 	      // Blitz buffer to screen

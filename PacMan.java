@@ -97,6 +97,9 @@ public class PacMan extends Applet
       case  GameModel.STATE_COLOR:
     	  selectColor();
     	  break;
+      case GameModel.STATE_HIGHSCORE:
+    	  showHighScore();
+    	  break;
       default:
     	  System.out.println("Well, you're screwd. Something broke!");
     	  break;
@@ -104,13 +107,26 @@ public class PacMan extends Applet
       m_gameUI.repaint();        m_topCanvas.repaint (); 
 	}
    
-   private void selectColor() {
+   private void showHighScore() {
+	   m_soundMgr.stop ();
+	   m_gameModel.m_bIntroInited = false;
+	   m_gameUI.m_bShowIntro = false;
+	   m_gameUI.m_bShowColor = false;
+	   m_gameUI.m_bShowHighScore = true;
+	   m_gameUI.m_bShowMultiplayer = false;
+	   m_gameUI.m_bRedrawAll = true;
+		
+	}
+
+private void selectColor() {
 	   //For goes to the color selection screen
 	   m_soundMgr.stop ();
 	   m_gameModel.m_bIntroInited = false;
 	   m_gameUI.m_bShowIntro = false;
+	   m_gameUI.m_bShowHighScore = false;
+	   m_gameUI.m_bShowMultiplayer = false;
 	   m_gameUI.m_bShowColor = true;
-	   m_gameUI.m_bRedrawAll = true;	
+	   m_gameUI.m_bRedrawAll = true;
 	
 }
 
@@ -169,6 +185,7 @@ private void startNewGame() {
        m_gameModel.m_bIntroInited = false;
        m_gameUI.m_bShowIntro = false;
        m_gameUI.m_bShowColor = false;
+       m_gameUI.m_bShowHighScore = false;
        m_gameUI.m_bShowMultiplayer = false;
        m_gameUI.m_bRedrawAll = true;
 	
@@ -186,8 +203,8 @@ private void setIntroScreen() {
 	  m_gameUI.m_bShowIntro = true;
 	  m_gameUI.m_bShowColor = false;
       m_gameUI.m_bShowMultiplayer = false;
-     
-	  
+      m_gameUI.m_bShowHighScore = false;
+ 
 }
 
 private void startMultiplayerScreen() {
@@ -197,7 +214,9 @@ private void startMultiplayerScreen() {
 	  m_soundMgr.stop ();
 	  m_gameModel.m_bIntroInited = false;
 	  m_gameUI.m_bShowIntro = false;
+	  m_gameUI.m_bShowHighScore = false;
 	  m_gameUI.m_bShowMultiplayer = true;
+	  m_gameUI.m_bShowColor = false;
 	  m_gameUI.m_bRedrawAll = true;	
 }
 

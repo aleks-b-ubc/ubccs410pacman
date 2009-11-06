@@ -12,6 +12,8 @@ class pacManKeyAdapter extends KeyAdapter {
 	}
 
 	public void keyPressed(KeyEvent event) {
+		
+		
 		switch (event.getKeyCode()) {
 		case KeyEvent.VK_A:
 			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.LEFT;
@@ -84,6 +86,11 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameModel.m_nTicks2AboutShow = 0;
 			break;
 
+		case KeyEvent.VK_H:
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_HIGHSCORE;
+			
+			break;
+			
 		// V is for SOUND
 		case KeyEvent.VK_V:
 			m_pacMan.m_soundMgr.m_bEnabled = !m_pacMan.m_soundMgr.m_bEnabled;
@@ -96,29 +103,34 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.toggleGhostAI();
 			break;
 			
+			
 		//1 Sets the color to white
 		//2 Sets the color to yellow
 		//3 Sets the color to green
 		//4 Sets the color to blue
 		case KeyEvent.VK_1:
-			m_pacMan.m_gameModel.m_things[0].setColor(Color.white);
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			changePacManColor(Color.white);
 			break;
 		case KeyEvent.VK_2:
-			m_pacMan.m_gameModel.m_things[0].setColor(Color.yellow);
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			changePacManColor(Color.yellow);
 			break;
 		case KeyEvent.VK_3:
-			m_pacMan.m_gameModel.m_things[0].setColor(Color.green);
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			changePacManColor(Color.green);
 			break;
 		case KeyEvent.VK_4:
-			m_pacMan.m_gameModel.m_things[0].setColor(Color.blue);
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			changePacManColor(Color.blue);
 			break;
 
 		default:
 			System.out.println("Hello World!");
 		}
+	}
+
+	private void changePacManColor(Color newColor) {
+		m_pacMan.m_gameModel.m_things[0].setColor(newColor);
+		m_pacMan.m_bottomCanvas.setPacManColor(newColor);
+		m_pacMan.m_bottomCanvas.repaint();
+		m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+		
 	}
 }
