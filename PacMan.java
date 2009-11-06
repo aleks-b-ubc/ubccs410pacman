@@ -58,60 +58,128 @@ public class PacMan extends Applet
    
    // Master ticker that runs various parts of the game   // based on the GameModel's STATE
 	public void tick ()   {
-      //long temp = System.currentTimeMillis ();      m_globalTickCount++;      
-      if (m_gameModel.m_state == GameModel.STATE_ABOUT)
-      {         m_soundMgr.stop ();
-         m_gameModel.m_bIntroInited = false;         m_gameUI.m_bShowIntro = false;         m_gameUI.m_bShowAbout = true;
-         m_gameUI.m_bRedrawAll = true;
-         m_gameModel.m_nTicks2AboutShow++;         if (m_gameModel.m_nTicks2AboutShow == 15000 / m_delay)
-         {            m_gameModel.m_state = GameModel.STATE_INTRO;            m_gameModel.m_nTicks2AboutShow = 0;         }
-         
-      } else if (m_gameModel.m_state == GameModel.STATE_INTRO)      {
-         tickIntro ();         m_gameUI.m_bShowIntro = true;
-               } else if (m_gameModel.m_state == GameModel.STATE_PAUSED)
-      {         m_gameUI.m_bDrawPaused = true;         m_gameUI.m_bRedrawAll = true;
-         m_gameUI.repaint ();         return;      
-      } else if (m_gameModel.m_state == GameModel.STATE_NEWGAME)      {
-         m_soundMgr.stop ();         m_gameModel.newGame ();
-         m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;         m_gameModel.m_nTicks2BeginPlay = 0;
-         m_gameModel.m_bIntroInited = false;         m_gameUI.m_bShowIntro = false;
-         m_gameUI.m_bShowAbout = false;         m_gameUI.m_bRedrawAll = true;
-               } else if (m_gameModel.m_state == GameModel.STATE_GAMEOVER)      {
-         if (m_gameModel.m_nTicks2GameOver == 0)         {            if (m_gameModel.m_player.m_score > m_gameModel.m_highScore)            {
-               m_gameModel.m_highScore = m_gameModel.m_player.m_score;
-               m_topCanvas.repaint ();  
-            }            }
-         
-         m_gameModel.m_nTicks2GameOver++;         
-         // After 3 seconds go to the intro page         if (m_gameModel.m_nTicks2GameOver == 3000 / m_delay)         {
-            m_gameModel.m_state = GameModel.STATE_INTRO;            m_gameModel.m_nTicks2GameOver = 0;
-         }
-                  m_gameUI.m_bDrawGameOver = true;         m_gameUI.m_bRedrawAll = true;
-         m_gameUI.repaint ();         return;               } else if (m_gameModel.m_state == GameModel.STATE_LEVELCOMPLETE)
-      {
-         m_soundMgr.stop ();         tickLevelComplete ();      
-      } else if (m_gameModel.m_state == GameModel.STATE_DEADPACMAN)
-      {         m_soundMgr.stop ();
-         if (m_gameModel.m_nLives == 0)         {
-            m_gameModel.m_state = GameModel.STATE_GAMEOVER;
-            m_gameModel.m_nTicks2GameOver = 0;                     } else {
-            m_gameModel.restartGame ();            m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;            m_bottomCanvas.repaint ();                  }
-                  } else if (m_gameModel.m_state == GameModel.STATE_BEGIN_PLAY)
-      {
-         tickBeginPlay ();
+      //long temp = System.currentTimeMillis ();      m_globalTickCount++;
       
-      } else if (m_gameModel.m_state == GameModel.STATE_PLAYING)
-      {
-         tickGamePlay ();
-      } else if (m_gameModel.m_state == GameModel.STATE_DEAD_PLAY)
-      {
-         tickDeadPlay ();
-      }
-            
+      switch(m_gameModel.m_state){
+      case GameModel.STATE_MULTIPLAYER_SELECT:
+    	  startMultiplayerScreen();
+    	  break;
+      case GameModel.STATE_INTRO:
+    	  setIntroScreen();
+    	  break;
+      case GameModel.STATE_PAUSED:
+    	  gamePaused();
+    	  break;
+      case GameModel.STATE_NEWGAME:
+    	  startNewGame();
+    	  break;
+      case GameModel.STATE_GAMEOVER:
+    	  gameOver();
+    	  break;
+      case GameModel.STATE_LEVELCOMPLETE:
+    	  levelComplete();
+    	  break;
+      case GameModel.STATE_DEADPACMAN:
+    	  deadPacman();
+    	  break;
+      case GameModel.STATE_BEGIN_PLAY:
+    	  tickBeginPlay ();
+    	  break;
+      case GameModel.STATE_PLAYING:
+    	  tickGamePlay();
+    	  break;
+      case GameModel.STATE_DEAD_PLAY:
+    	  tickDeadPlay ();
+    	  break;
+      }        
       m_gameUI.repaint();        m_topCanvas.repaint ();     
 	}
    
-   // Ticked when level has completed
+   private void deadPacman() {
+	   m_soundMgr.stop ();
+       if (m_gameModel.m_nLives == 0)
+       {
+          m_gameModel.m_state = GameModel.STATE_GAMEOVER;
+          m_gameModel.m_nTicks2GameOver = 0;
+          
+       } else {
+          m_gameModel.restartGame ();
+          m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;
+          m_bottomCanvas.repaint ();
+       
+       }
+}
+
+private void levelComplete() {
+	   m_soundMgr.stop ();
+       tickLevelComplete ();
+}
+
+private void gameOver() {
+	   if (m_gameModel.m_nTicks2GameOver == 0)
+       {
+          if (m_gameModel.m_player.m_score > m_gameModel.m_highScore)
+          {
+             m_gameModel.m_highScore = m_gameModel.m_player.m_score;
+             m_topCanvas.repaint ();  
+          }   
+       }
+       
+       m_gameModel.m_nTicks2GameOver++;
+       
+       // After 3 seconds go to the intro page
+       if (m_gameModel.m_nTicks2GameOver == 3000 / m_delay)
+       {
+          m_gameModel.m_state = GameModel.STATE_INTRO;
+          m_gameModel.m_nTicks2GameOver = 0;
+       }
+       
+       m_gameUI.m_bDrawGameOver = true;
+       m_gameUI.m_bRedrawAll = true;
+       m_gameUI.repaint ();
+       return;
+	
+}
+
+private void startNewGame() {
+	   
+	   m_soundMgr.stop ();
+       m_gameModel.newGame ();
+       m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;
+       m_gameModel.m_nTicks2BeginPlay = 0;
+       m_gameModel.m_bIntroInited = false;
+       m_gameUI.m_bShowIntro = false;
+       m_gameUI.m_bShowAbout = false;
+       m_gameUI.m_bRedrawAll = true;
+	
+}
+
+private void gamePaused() {
+	   m_gameUI.m_bDrawPaused = true;
+       m_gameUI.m_bRedrawAll = true;
+       m_gameUI.repaint ();
+       return;
+}
+
+private void setIntroScreen() {
+	  tickIntro ();
+	  m_gameUI.m_bShowIntro = true;
+}
+
+private void startMultiplayerScreen() {
+	   
+	  //The commented out code draws the "About screen" We are going to
+	  //Use this for multiplayer
+   	  //Haven't written this yet...
+	    	  
+	  m_soundMgr.stop ();
+	  m_gameModel.m_bIntroInited = false;
+	  m_gameUI.m_bShowIntro = false;
+	  m_gameUI.m_bShowAbout = true;
+	  m_gameUI.m_bRedrawAll = true;	
+}
+
+// Ticked when level has completed
    public void tickLevelComplete ()
    {
       if (m_gameModel.m_nTicks2LevelComp == 0)

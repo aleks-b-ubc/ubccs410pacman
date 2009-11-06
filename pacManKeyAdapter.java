@@ -55,7 +55,7 @@ class pacManKeyAdapter extends KeyAdapter {
 					+ m_pacMan.m_gameModel.multiplayer);
 			break;
 
-		case KeyEvent.VK_M:
+		case KeyEvent.VK_L:
 			// set multiplayer as true.
 			m_pacMan.m_gameModel.multiplayer = true;
 			m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
@@ -81,9 +81,9 @@ class pacManKeyAdapter extends KeyAdapter {
 			}
 			break;
 
-		// K is for ABOUT
-		case KeyEvent.VK_K:
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_ABOUT;
+		// K is for Multiplayer waiting screen
+		case KeyEvent.VK_M:
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_MULTIPLAYER_SELECT;
 			m_pacMan.m_gameModel.m_nTicks2AboutShow = 0;
 			break;
 

@@ -82,13 +82,13 @@ class BottomCanvas extends Canvas
       m_offGraphics.drawString ("\'N\' for New Game", x, y);
       
       y += fm.getAscent() + fm.getDescent();
-      m_offGraphics.drawString ("\'M\' for Multiplayer", x, y);
+      m_offGraphics.drawString ("\'L\' for Local Multiplayer", x, y);
       
       y += fm.getAscent() + fm.getDescent();
       m_offGraphics.drawString ("\'P\' to Pause", x, y);
       
       y += fm.getAscent() + fm.getDescent();
-      m_offGraphics.drawString ("\'K\' for About", x, y);
+      m_offGraphics.drawString ("\'M\' for Multiplayer", x, y);
       
       y += fm.getAscent() + fm.getDescent();
       if (m_pacMan.m_soundMgr != null && m_pacMan.m_soundMgr.m_bEnabled)
