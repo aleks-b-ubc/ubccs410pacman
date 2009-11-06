@@ -80,7 +80,7 @@ class BottomCanvas extends Canvas
       
       y += fm.getAscent() + fm.getDescent();
       m_offGraphics.drawString ("\'P\' to Pause", x, y);
-      
+     
       y += fm.getAscent() + fm.getDescent();
       m_offGraphics.drawString ("\'N\' for New Game", x, y);
       

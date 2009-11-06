@@ -31,6 +31,12 @@ public class Ghost extends Thing{
 		super(gameModel, type, startX, startY, middleX);
 		// TODO Auto-generated constructor stub
 	}
+	
+		public void setColor(Color newColor){
+			//this is hear because we have given "Thing" class the method
+			//since we will NOT change the ghost color. This is just left blank! =)
+		}
+		
 	   // Overriden to draw Ghosts
 	   public void draw (GameUI gameUI, Graphics g2)
 	   {

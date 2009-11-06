@@ -16,6 +16,7 @@ class Player extends Thing
    int      m_mouthDegreeDying   = 45;
    int      m_mouthArcDying      = 135;   // Used to animate Pacman dying
    
+   private Color pacmanColor = Color.yellow; //Default color
    
    // This constructor is used to place Pacman's X-location between two cells.
    Player (GameModel gameModel, byte type, int startX, int startY, boolean bMiddleX)
@@ -117,7 +118,8 @@ class Player extends Thing
             break;
       }
       
-      //TODO: NOTE THIS IS WHERE COLOUR IS SET!      g2.setColor (Color.green);      
+      
+	//TODO: NOTE THIS IS WHERE COLOUR IS SET!      g2.setColor(pacmanColor);      
       // Draw Pacman Chomping      if (!m_bDrawDead)      {
          g2.fillArc ((int)(pacManX + deltaPixelX), (int)(pacManY + deltaPixelY), pacManDiameter, pacManDiameter, m_degreeRotation + m_mouthDegree, 200);
          g2.fillArc ((int)(pacManX + deltaPixelX), (int)(pacManY + deltaPixelY), pacManDiameter, pacManDiameter, m_degreeRotation - m_mouthDegree, -200);      
@@ -186,5 +188,9 @@ class Player extends Thing
       m_lastLocX = m_startX;
       m_lastLocY = m_startY;
       m_boundingBoxFull.setBounds (0, 0, 0, 0);
+   }
+   
+   public void setColor(Color newColor){
+	   pacmanColor = newColor;
    }
 }

@@ -29,7 +29,8 @@ public class GameUI extends Canvas
    boolean     m_bRedrawAll = false;   // Set to true to tell Update to Paint
    boolean     m_bDrawReady = false;   int         m_gridInset;         // Starting painting the maze with this offset   boolean     m_bFlipWallColor  = false;   boolean     m_bDrawGameOver   = false;   boolean     m_bDrawPaused     = false;   boolean     m_bShowColor      = false;
    boolean     m_bShowMultiplayer = false;   Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
-      // Variables associated with the intro page   boolean     m_bShowIntro      = true;   
+      // Variables associated with the intro page   boolean     m_bShowIntro      = true;
+   Color pacmanColour = Color.yellow; //This is the default color for packman   
    
    GameUI (PacMan pacMan, GameModel gameModel, int width, int height) 
    {      super ();
@@ -209,11 +210,12 @@ public class GameUI extends Canvas
 	
 }
 
-// Displays the About page containing the PAC-MAN banner
+// Displays the Color selection page containing the PAC-MAN banner
    public void paintColour (Graphics g)
    {      int         x             = 0;      int         y             = 0;
       int         width         = 0;
-      int         stringLength  = 0;      FontMetrics fm;      
+      int         stringLength  = 0;
+      Font        m_Colorfont = new Font ("Helvetica", Font.BOLD, 18);      FontMetrics fm;      
       m_offGraphics.setColor (Color.black);      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
       if (m_imagePacman == null)
       {
@@ -223,13 +225,27 @@ public class GameUI extends Canvas
       y = 50;      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
       m_offGraphics.drawImage (m_imagePacman, x, y, this);
       
-      m_offGraphics.setFont (m_font);      m_offGraphics.setColor (Color.white);
+      m_offGraphics.setFont (m_Colorfont);      m_offGraphics.setColor (Color.white);
       fm = m_offGraphics.getFontMetrics();
             m_offGraphics.setColor (Color.white);
       x = 10;      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
       m_offGraphics.drawString ("Welcome to PAC-MAN in Java!", x, y);
             y += fm.getAscent() + fm.getDescent ();      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("This is the Color location.", x, y);
+      y += fm.getAscent() + fm.getDescent ();
+      y += fm.getAscent() + fm.getDescent ();
+      m_offGraphics.drawString ("Pess '1' for WHITE.", x, y);
+      
+      y += fm.getAscent() + fm.getDescent ();
+      m_offGraphics.setColor (Color.yellow);
+      m_offGraphics.drawString ("Pess '2' for YELLOW.", x, y);
+      
+      y += fm.getAscent() + fm.getDescent ();
+      m_offGraphics.setColor (Color.green);
+      m_offGraphics.drawString ("Pess '3' for GREEN.", x, y);
+      
+      y += fm.getAscent() + fm.getDescent ();
+      m_offGraphics.setColor (Color.blue);
+      m_offGraphics.drawString ("Pess '4' for BLUE.", x, y);
       
       g.drawImage (m_offImage, 0, 0, this); 
             }

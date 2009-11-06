@@ -58,6 +58,7 @@ public class Thing
       }
    }
    
+   public void setColor(Color newColor) {}
    public void eatItem (int itemType) {}
    public void draw (GameUI gameUI, Graphics g2) {}
    public void tickThing () {}
@@ -202,4 +203,6 @@ public class Thing
       }
       return true;
    }
+
+
 }

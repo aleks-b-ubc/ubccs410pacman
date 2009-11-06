@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -93,6 +94,27 @@ class pacManKeyAdapter extends KeyAdapter {
 
 		case KeyEvent.VK_I:
 			m_pacMan.toggleGhostAI();
+			break;
+			
+		//1 Sets the color to white
+		//2 Sets the color to yellow
+		//3 Sets the color to green
+		//4 Sets the color to blue
+		case KeyEvent.VK_1:
+			m_pacMan.m_gameModel.m_things[0].setColor(Color.white);
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			break;
+		case KeyEvent.VK_2:
+			m_pacMan.m_gameModel.m_things[0].setColor(Color.yellow);
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			break;
+		case KeyEvent.VK_3:
+			m_pacMan.m_gameModel.m_things[0].setColor(Color.green);
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
+			break;
+		case KeyEvent.VK_4:
+			m_pacMan.m_gameModel.m_things[0].setColor(Color.blue);
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_INTRO;
 			break;
 
 		default:

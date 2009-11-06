@@ -105,7 +105,7 @@ public class PacMan extends Applet
 	}
    
    private void selectColor() {
-	   //For now goes to the same screen as the "About" screen
+	   //For goes to the color selection screen
 	   m_soundMgr.stop ();
 	   m_gameModel.m_bIntroInited = false;
 	   m_gameUI.m_bShowIntro = false;
@@ -184,6 +184,10 @@ private void gamePaused() {
 private void setIntroScreen() {
 	  tickIntro ();
 	  m_gameUI.m_bShowIntro = true;
+	  m_gameUI.m_bShowColor = false;
+      m_gameUI.m_bShowMultiplayer = false;
+     
+	  
 }
 
 private void startMultiplayerScreen() {
