@@ -60,6 +60,9 @@ public class PacMan extends Applet
 	public void tick ()   {
       //long temp = System.currentTimeMillis ();      m_globalTickCount++;
       
+      //TODO: REMOVE ME
+      System.out.println("TICK! Number: "+ m_globalTickCount);
+      
       switch(m_gameModel.m_state){
       case GameModel.STATE_MULTIPLAYER_SELECT:
     	  startMultiplayerScreen();
@@ -91,11 +94,27 @@ public class PacMan extends Applet
       case GameModel.STATE_DEAD_PLAY:
     	  tickDeadPlay ();
     	  break;
+      case  GameModel.STATE_COLOR:
+    	  selectColor();
+    	  break;
+      default:
+    	  System.out.println("Well, you're screwd. Something broke!");
+    	  break;
       }        
-      m_gameUI.repaint();        m_topCanvas.repaint ();     
+      m_gameUI.repaint();        m_topCanvas.repaint (); 
 	}
    
-   private void deadPacman() {
+   private void selectColor() {
+	   //For now goes to the same screen as the "About" screen
+	   m_soundMgr.stop ();
+	   m_gameModel.m_bIntroInited = false;
+	   m_gameUI.m_bShowIntro = false;
+	   m_gameUI.m_bShowColor = true;
+	   m_gameUI.m_bRedrawAll = true;	
+	
+}
+
+private void deadPacman() {
 	   m_soundMgr.stop ();
        if (m_gameModel.m_nLives == 0)
        {
@@ -149,7 +168,8 @@ private void startNewGame() {
        m_gameModel.m_nTicks2BeginPlay = 0;
        m_gameModel.m_bIntroInited = false;
        m_gameUI.m_bShowIntro = false;
-       m_gameUI.m_bShowAbout = false;
+       m_gameUI.m_bShowColor = false;
+       m_gameUI.m_bShowMultiplayer = false;
        m_gameUI.m_bRedrawAll = true;
 	
 }
@@ -168,14 +188,12 @@ private void setIntroScreen() {
 
 private void startMultiplayerScreen() {
 	   
-	  //The commented out code draws the "About screen" We are going to
-	  //Use this for multiplayer
-   	  //Haven't written this yet...
+	  //This is going to show up the Multiplayer waiting area
 	    	  
 	  m_soundMgr.stop ();
 	  m_gameModel.m_bIntroInited = false;
 	  m_gameUI.m_bShowIntro = false;
-	  m_gameUI.m_bShowAbout = true;
+	  m_gameUI.m_bShowMultiplayer = true;
 	  m_gameUI.m_bRedrawAll = true;	
 }
 

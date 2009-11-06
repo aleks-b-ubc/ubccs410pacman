@@ -70,7 +70,7 @@ public class GameModel {
 	// TODO: This is where the multiplayer stuff lies
 	// Variables for Multiplayer
 	int numberPlayers = 1; // Number of human players
-	boolean multiplayer = false; // Is set to true of the game is multiplayer.
+	boolean localMultiplayer = false; // Is set to true of the game is local multiplayer.
 
 	// Variables for Powerup
 	int m_nTicksPowerup; // Number of ticks power up lasts.
@@ -114,10 +114,8 @@ public class GameModel {
 		m_player = new Player(this, Thing.PACMAN, 13, 23, true);
 		m_ghosts = new Ghost[4];
 
-		// TODO: REMOVE
-		System.out.println("Ghosts are constructed.");
-
-		//By default all ghosts are set to AI ghosts.
+		//By default all ghosts are set to AI ghosts. I'd rather not have it here
+		//But moving it breaks a lot of things. 
 		m_ghosts[0] = new GhostAI(this, Thing.GHOST, 13, 11, true, Color.red, 0);
 		m_ghosts[1] = new GhostAI(this, Thing.GHOST, 12, 14, false, Color.pink,
 				2000);
@@ -156,9 +154,7 @@ public class GameModel {
 	}
 
 	public void fillThingArray() {
-		//TODO: REMOVE
-		System.out.println("FillThingsArray ran!");
-		
+
 		int thingsLength = m_ghosts.length + 2; // Plus 1 for the player and 1
 												// for the fruit
 		m_things = new Thing[thingsLength];
@@ -339,17 +335,13 @@ public class GameModel {
 
 	// Called to reinitialize the game state and start a new game
 	public void newGame() {
-		// TODO: REMOVE
-		System.out.println("New game called! multiplayer is " + multiplayer);
 
 		// If the game is going to be multiplayer, we set the ghost as human.
 		// Else it's an AI.
-		if (multiplayer) {
+		if (localMultiplayer) {
 			m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 13, 11, true,
 					Color.red, 0);
 			m_ghosts[0] = m_ghostPlayer;
-			// TODO: REMOVE
-			System.out.println("Ghost set to human!");	
 		}
 		else{
 			m_ghosts[0] = new GhostAI(this, Thing.GHOST, 13, 11, true, Color.red, 0);

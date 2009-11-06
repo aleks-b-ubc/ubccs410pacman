@@ -46,24 +46,20 @@ class pacManKeyAdapter extends KeyAdapter {
 		case KeyEvent.VK_N:
 			// make sure we DO NOT carry over multiplayer state accidently
 			// as such we set multiplayer as false
-			m_pacMan.m_gameModel.multiplayer = false;
+			m_pacMan.m_gameModel.localMultiplayer = false;
 			m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
-
-			// TODO: REMOVE
-			System.out.println("N key pressed. Multiplayer set to "
-					+ m_pacMan.m_gameModel.multiplayer);
+			break;
+			
+		case KeyEvent.VK_C:
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_COLOR;
 			break;
 
 		case KeyEvent.VK_L:
-			// set multiplayer as true.
-			m_pacMan.m_gameModel.multiplayer = true;
+			// set Local multiplayer as true.
+			m_pacMan.m_gameModel.localMultiplayer = true;
 			m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
-
-			// TODO: REMOVE
-			System.out.println("M key pressed. Multiplayer set to "
-					+ m_pacMan.m_gameModel.multiplayer);
 			break;
 
 		case KeyEvent.VK_P:

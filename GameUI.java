@@ -27,7 +27,8 @@ public class GameUI extends Canvas
       Color       m_wallColor;         // Wall color, changes with different mazes   Color       m_wallAltColor;      // Second wall color, used when flahing level complete
    Font        m_font;              // Font for Ghost points string and About page   Font        m_readyFont;         // Font for "Ready", "GameOver" and "Paused" strings   Font        m_readyFontItalic;   // Font for "!!" bang in Ready string
    boolean     m_bRedrawAll = false;   // Set to true to tell Update to Paint
-   boolean     m_bDrawReady = false;   int         m_gridInset;         // Starting painting the maze with this offset   boolean     m_bFlipWallColor  = false;   boolean     m_bDrawGameOver   = false;   boolean     m_bDrawPaused     = false;   boolean     m_bShowAbout      = false;   Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
+   boolean     m_bDrawReady = false;   int         m_gridInset;         // Starting painting the maze with this offset   boolean     m_bFlipWallColor  = false;   boolean     m_bDrawGameOver   = false;   boolean     m_bDrawPaused     = false;   boolean     m_bShowColor      = false;
+   boolean     m_bShowMultiplayer = false;   Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
       // Variables associated with the intro page   boolean     m_bShowIntro      = true;   
    
    GameUI (PacMan pacMan, GameModel gameModel, int width, int height) 
@@ -124,10 +125,16 @@ public class GameUI extends Canvas
          return;
       }
          
-      if (m_bShowAbout)
+      if (m_bShowColor)
       {
-         paintAbout (g);
+         paintColour (g);
          return;
+      }
+      
+      if (m_bShowMultiplayer)
+      {
+    	  paintMultiplayer(g);
+    	  return;
       }
       
       m_offGraphics.setColor (Color.blue);
@@ -165,8 +172,45 @@ public class GameUI extends Canvas
       g.drawImage (m_offImage, 0, 0, this); 
    }
    
-   // Displays the About page containing the PAC-MAN banner
-   public void paintAbout (Graphics g)
+   public void paintMultiplayer(Graphics g) {
+	   int         x             = 0;
+	      int         y             = 0;
+	      int         width         = 0;
+	      int         stringLength  = 0;
+	      FontMetrics fm;
+	      
+	      m_offGraphics.setColor (Color.black);
+	      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
+	      if (m_imagePacman == null)
+	      {
+	         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+	      }
+	      
+	      // Draw Logo Image
+	      y = 50;
+	      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+	      m_offGraphics.drawImage (m_imagePacman, x, y, this);
+	      
+	      m_offGraphics.setFont (m_font);
+	      m_offGraphics.setColor (Color.white);
+	      fm = m_offGraphics.getFontMetrics();
+	      
+	      m_offGraphics.setColor (Color.white);
+	      x = 10;
+	      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
+	      m_offGraphics.drawString ("Welcome to PAC-MAN in Java!", x, y);
+	      
+	      
+	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.drawString ("This is the Multiplayer screen!", x, y);
+	       
+	      // Blitz buffer to screen
+	      g.drawImage (m_offImage, 0, 0, this); 
+	
+}
+
+// Displays the About page containing the PAC-MAN banner
+   public void paintColour (Graphics g)
    {      int         x             = 0;      int         y             = 0;
       int         width         = 0;
       int         stringLength  = 0;      FontMetrics fm;      
@@ -185,40 +229,8 @@ public class GameUI extends Canvas
       x = 10;      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
       m_offGraphics.drawString ("Welcome to PAC-MAN in Java!", x, y);
             y += fm.getAscent() + fm.getDescent ();      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("This game contains the original Pacman maze and all", x, y);
-            y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("four Ms.Pacman mazes.  You have to finish each maze", x, y);      
-      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("twice before advancing to the next.", x, y);            y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("After every 10,000 points, you get an extra life.", x, y);            y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("Have fun and watch out for the bonus items!", x, y);
-            y += fm.getAscent() + fm.getDescent ();
-      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("Question, Comments or Bugs?", x , y);
-            y += fm.getAscent() + fm.getDescent ();
-      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("Please e-mail me at:", x, y);
+      m_offGraphics.drawString ("This is the Color location.", x, y);
       
-      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("benny_chow@hotmail.com", x, y);
-      
-      y += fm.getAscent() + fm.getDescent ();
-      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("Or visit my site at:", x, y);
-      
-      y += fm.getAscent() + fm.getDescent ();
-      m_offGraphics.drawString ("http://www.bennychow.com", x, y);
-            //Welcome to PAC-MAN in Java!      //
-      //This game contains the original Pacman maze and all four       //Ms.Pacman mazes.  You have to finish each maze twice before      //advancing to the next.
-      //After every 10,000 points, you get an extra life.
-      //Have fun and watch out for the bonus items!      //
-      //Question, Comments or Bugs?      //Please e-mail me at:
-      //benny_chow@hotmail.com
-      //
-      //Or visit my site at:
-      //http://www.bennychow.com
-      
-      // Blitz buffer to screen
       g.drawImage (m_offImage, 0, 0, this); 
             }
    
