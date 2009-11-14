@@ -3,8 +3,10 @@ import java.io.Serializable;
 
 //creating my own class for encapsulation of necessary data
 //that will go between the nodes
+@SuppressWarnings("serial")
 public class PacmanDataPacket implements Serializable{
 	
+	/**
 	static final int STATE_START = 0; // Not used.
 	static final int STATE_DEADPACMAN = 1; // Pacman's dead. Use next life or
 											// GameOver?
@@ -21,7 +23,9 @@ public class PacmanDataPacket implements Serializable{
 	static final int STATE_MULTIPLAYER_WAITROOM = 10; // Used to go go the Multiplayer waiting page
 	static final int STATE_COLOR = 11; // Color selection page
 	static final int STATE_HIGHSCORE = 12; //High score selectino page
-
+	static final int STATE_HOST = 13;		//Hosting a multiplayer game
+	static final int STATE_CONNECT = 14;	//Connecting to a multiplayer game
+	*/
 	
 	int currentGameState;
 	
@@ -29,31 +33,35 @@ public class PacmanDataPacket implements Serializable{
 		currentGameState = gameState;
 	}
 	
-	public String toString(){
+	public String stateToString(){
 		switch(currentGameState){
-	      case GameModel.STATE_MULTIPLAYER_WAITROOM:
+		case GameModel.STATE_HOST:
+			return "STATE_HOST";
+		case GameModel.STATE_CONNECT:
+			return "STATE_CONNECT";
+	    case GameModel.STATE_MULTIPLAYER_WAITROOM:
 	    	  return "STATE_MULTIPLAYER_WAITROOM";
-	      case GameModel.STATE_INTRO:
+	    case GameModel.STATE_INTRO:
 	    	  return "STATE_INTRO";
-	      case GameModel.STATE_PAUSED:
+	    case GameModel.STATE_PAUSED:
 	    	  return "STATE_PAUSED";
-	      case GameModel.STATE_NEWGAME:
+	    case GameModel.STATE_NEWGAME:
 	    	  return "STATE_NEWGAME";
-	      case GameModel.STATE_GAMEOVER:
+	    case GameModel.STATE_GAMEOVER:
 	    	  return "STATE_GAMEOVER";
-	      case GameModel.STATE_LEVELCOMPLETE:
+	    case GameModel.STATE_LEVELCOMPLETE:
 	    	  return "STATE_LEVELCOMPLETE";
-	      case GameModel.STATE_DEADPACMAN:
+        case GameModel.STATE_DEADPACMAN:
 	    	  return "STATE_DEADPACMAN";
-	      case GameModel.STATE_BEGIN_PLAY:
+	    case GameModel.STATE_BEGIN_PLAY:
 	    	  return "STATE_BEGIN_PLAY";
-	      case GameModel.STATE_PLAYING:
+        case GameModel.STATE_PLAYING:
 	    	  return "STATE_PLAYING";
-	      case GameModel.STATE_DEAD_PLAY:
+	    case GameModel.STATE_DEAD_PLAY:
 	    	  return "STATE_DEAD_PLAY";
-	      case GameModel.STATE_COLOR:
+	    case GameModel.STATE_COLOR:
 	    	  return "STATE_COLOR";
-	      case GameModel.STATE_HIGHSCORE:
+	    case GameModel.STATE_HIGHSCORE:
 	    	  return "STATE_HIGHSCORE";
 		default:
 	    	  return "Well, you're screwd. Something broke!";

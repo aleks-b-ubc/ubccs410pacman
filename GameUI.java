@@ -240,10 +240,19 @@ public void paintMultiplayer(Graphics g) {
 	      x = 10;
 	      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
 	      
-	      m_offGraphics.drawString ("This is the Multiplayer screen!", x, y);
+	      m_offGraphics.drawString ("Welcome to Multiplayer!", x, y);
+	      
+	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.drawString ("Press 'H' to Host the game.", x, y);
+	      
+	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.drawString ("Press 'C' to Connect the game.", x, y);
+	      
 	       
 	      // Blitz buffer to screen
 	      g.drawImage (m_offImage, 0, 0, this); 
+	      
+	      
 	
 }
 

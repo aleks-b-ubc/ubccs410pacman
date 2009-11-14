@@ -1,10 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.Scanner;
 
@@ -44,13 +46,13 @@ public class TestClientClass {
 		
 		//TestClientClass theClient = new TestClientClass();
 		int listenPort = 4444;
-		//int sendPort = 5555;
+		int sendPort = 5555;
 		
-		byte[] buffer = new byte[1024];
 
 		//This is here to show that communication is working!
 		PacmanDataPacket received;	
-		PacmanDataPacket toSend = new PacmanDataPacket(11);
+		
+		PacmanDataPacket packetToSend = new PacmanDataPacket(11);
 		
 		//Scanner kbd = new Scanner(System.in);
 		//System.out.println("To send press 1: ");
@@ -61,37 +63,38 @@ public class TestClientClass {
 		//THIS HAS WORKING CODE TO SEND THE PACKMANPACKET!
 		/**
 		if(choice == 1){
-			DatagramSocket sendSocket = new DatagramSocket(sendPort);
+			//make a server socket, and then accept incoming connection
+			ServerSocket listeningSocket = new ServerSocket(listenPort);
+			//hand it over the the main socket
+			Socket socket = listeningSocket.accept();
 			
-			ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
-			ObjectOutputStream out = new ObjectOutputStream(outBuffer);
-			out.writeObject(toSend);
+			//next create a object output stream that will use the byteArray stream
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			//write out object to the line!
+			out.writeObject(packetToSend);
+			
+			packetToSend = new PacmanDataPacket(12);
+			out.writeObject(packetToSend);
+			
 			out.close();
-			
-			
-			DatagramPacket packet = new DatagramPacket(outBuffer.toByteArray(), outBuffer.toByteArray().length,
-					InetAddress.getLocalHost(), listenPort);
-			sendSocket.send(packet);
-			
 			
 		}
 		else{
-			*/
-		DatagramSocket listenSocket = new DatagramSocket(listenPort);
+		*/
+		
+		Socket receivingSocket = new Socket(InetAddress.getLocalHost(), listenPort);
+		ObjectInputStream in = new ObjectInputStream(receivingSocket.getInputStream());
 		//WORKING CODE FOR RECEIVING PACKMANPACKET
 		System.out.println("Ready to receive.");
 		while(true){
-
-			DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-			listenSocket.receive(packet);
-			
-			ByteArrayInputStream inBuffer = new ByteArrayInputStream(packet.getData());
-			ObjectInputStream in = new ObjectInputStream(inBuffer);
-			received = (PacmanDataPacket) in.readObject();
-			
-			System.out.println(received.toString());
+			try{
+				received = (PacmanDataPacket) in.readObject();
+				System.out.println(received.stateToString());
+			}	
+			catch(IOException e){
+				
+			}	
 		}
-	
 	}
-
+		
 }

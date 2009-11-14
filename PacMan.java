@@ -7,6 +7,8 @@ import java.lang.Math;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 
 @SuppressWarnings("serial")
@@ -22,38 +24,28 @@ public class PacMan extends Applet
    
    int            m_ticksPerSec;    // These two variables control game speed    int            m_delay;          // Milliseconds between ticks
    
+   
    boolean		  multiplayer;		// This is for keeping track if 
    									// the game is in multiplayer
    boolean		  controller;		// This is is for keeping track if this machine
 									// is the controller.
-   
-   DatagramSocket sendSocket;
-   int lastState = 0;				// Because 0 is not used!
+   boolean		  playerIsGhost;	//Used for multiplayer to determine if
+   									//if the player is a ghost
+
+   ServerSocket serverSocket;
+   Socket		sendingSocket;
+   ObjectOutputStream out;
+   int lastState = 0;				//This is used in updating the games current
+   									//state
    
    //TODO: change this. this is for testing
-   int listeningPort = 4444;		//the port on which local machine is listening
+   int listenPort = 4444;		//the port on which local machine is listening
    
-   //Ok, first I will write the sending part of the program. 
-   //So, first thing first. When we go multiplayer we will create a socket
-   //through which this game will broadcast changes in game state
-   //we will not be updating the whole game state, just send changes.
-   //NOTE: Might have to write a new class for the packet, or send everything
-   //down the tube in the raw format. Have to think about it.
-   
-   //FIRST!! Must establish reliable communication, Will create sending socket.
-   //send text updates when ever an event of interest occurs.
-   //for now will impliment it in single player!
+  
    
    
    public void init ()
    {
-	   //TODO: DO ONLY IF MULTIPLAYER
-	   try {
-		   sendSocket = new DatagramSocket();
-	   } catch (SocketException e) {
-		   e.printStackTrace();
-	   }	
-	   
       setTicksPerSec (35);
       
       // Create canvases and layout
@@ -98,16 +90,24 @@ public class PacMan extends Applet
       //TODO: REMOVE ME
       System.out.println("TICK! Number: "+ m_globalTickCount);   
       
-      
-      //TODO: Send current state!
       //This method sends the current state to other nodes!
-      try {
-    	  sendState(m_gameModel.m_state);
-      } catch (IOException e) {
-    	  e.printStackTrace();
+      //but only if the game is multipalyer
+      if(multiplayer)
+      {
+    	  try {
+    		  sendState(m_gameModel.m_state);
+    	  } catch (IOException e) {
+    		  e.printStackTrace();
+    	  }
       }
       
       switch(m_gameModel.m_state){
+      case GameModel.STATE_CONNECT:
+    	  connectMultiplayerGame();
+    	  break;
+      case GameModel.STATE_HOST:
+    	  hostMultiplayerGame();
+    	  break;
       case GameModel.STATE_MULTIPLAYER_WAITROOM:
     	  startMultiplayerScreen();
     	  break;
@@ -151,19 +151,38 @@ public class PacMan extends Applet
       m_gameUI.repaint();        m_topCanvas.repaint (); 
 	}
    
-	//This sends the current state, BUT only if it has changed.
+	private void connectMultiplayerGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void hostMultiplayerGame() {
+		multiplayer = true;
+		controller = true;
+		playerIsGhost = false;
+		
+		//create new server socket. Then wait for connection! Simple, no?
+		//Oh, once connection established we create a new output stream
+		//to output the data
+	    try {
+			serverSocket = new ServerSocket(listenPort);
+			//Oh. Here we do necessary UI changes. Need to code this in.
+			sendingSocket = serverSocket.accept();
+			out = new ObjectOutputStream(sendingSocket.getOutputStream());
+	    } catch (IOException e) {
+			e.printStackTrace();
+	    }	
+	}
+
+//This sends the current state, BUT only if it has changed.
    private void sendState(int mState) throws IOException {
 	   
 	  if(mState != lastState){
-		  PacmanDataPacket toSend = new PacmanDataPacket(mState);
-		  ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
-		  ObjectOutputStream out = new ObjectOutputStream(outBuffer);
-		  out.writeObject(toSend);
-		  out.close();
-		  
-		  DatagramPacket packet = new DatagramPacket(outBuffer.toByteArray(), outBuffer.toByteArray().length,
-				InetAddress.getLocalHost(), listeningPort);
-		  sendSocket.send(packet);
+		  PacmanDataPacket packetToSend = new PacmanDataPacket(mState);
+		  //next create a object output stream that will use the byteArray stream
+			//write out object to the line!
+			out.writeObject(packetToSend);
+			//out.close();
 		  
 		  //update lastState variable to the current state
 		  lastState = mState;
@@ -243,6 +262,10 @@ private void gameOver() {
 
 private void startNewGame() {
 	   
+		multiplayer = false;
+		controller = false;
+		playerIsGhost = false;
+	
 	   m_soundMgr.stop ();
        m_gameModel.newGame ();
        m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;
@@ -253,6 +276,8 @@ private void startNewGame() {
        m_gameUI.m_bShowHighScore = false;
        m_gameUI.m_bShowMultiplayer = false;
        m_gameUI.m_bRedrawAll = true;
+       
+       
 	
 }
 
@@ -285,7 +310,6 @@ private void startMultiplayerScreen() {
 	  m_gameUI.m_bShowColor = false;
 	  m_gameUI.m_bRedrawAll = true;
 	  
-	  multiplayer = true;
 }
 
 // Ticked when level has completed

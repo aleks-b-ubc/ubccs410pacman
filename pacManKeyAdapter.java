@@ -15,21 +15,9 @@ class pacManKeyAdapter extends KeyAdapter {
 		
 		
 		switch (event.getKeyCode()) {
-		case KeyEvent.VK_A:
-			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.LEFT;
-			break;
-
-		case KeyEvent.VK_D:
-			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.RIGHT;
-			break;
-
-		case KeyEvent.VK_W:
-			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.UP;
-			break;
-
-		case KeyEvent.VK_S:
-			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.DOWN;
-			break;
+		
+		//Arrow keys are used for Pacman singleplayer AND for network multiplayer
+		//if the player is a ghost
 		case KeyEvent.VK_LEFT:
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.LEFT;
 			break;
@@ -45,6 +33,23 @@ class pacManKeyAdapter extends KeyAdapter {
 		case KeyEvent.VK_DOWN:
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.DOWN;
 			break;
+		
+			//KEYS W,A,S,D are used for same machine multiplayer.
+		case KeyEvent.VK_A:
+			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.LEFT;
+			break;
+
+		case KeyEvent.VK_D:
+			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.RIGHT;
+			break;
+
+		case KeyEvent.VK_W:
+			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.UP;
+			break;
+
+		case KeyEvent.VK_S:
+			m_pacMan.m_gameModel.m_ghostPlayer.m_requestedDirection = Thing.DOWN;
+			break;
 
 			//N is for NEW SINGLE PLAYER GAME
 		case KeyEvent.VK_N:
@@ -55,9 +60,14 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
 			break;
 			
-			//C is for CHOOSING color
+			//C is for CHOOSING color OR Connecting to a game
 		case KeyEvent.VK_C:
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_COLOR;
+			if(m_pacMan.m_gameModel.m_state == GameModel.STATE_MULTIPLAYER_WAITROOM){
+				m_pacMan.m_gameModel.m_state = GameModel.STATE_CONNECT;
+			}
+			else{
+				m_pacMan.m_gameModel.m_state = GameModel.STATE_COLOR;
+			}
 			break;
 
 			//L is for LOCAL MULTIPLAYER
@@ -90,9 +100,15 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameModel.m_nTicks2AboutShow = 0;
 			break;
 
+			//H for Highscores OR if Multiplayer Waiting room, for HOSTING a game
 		case KeyEvent.VK_H:
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_HIGHSCORE;
-			
+			if(m_pacMan.m_gameModel.m_state == GameModel.STATE_MULTIPLAYER_WAITROOM){
+				
+				m_pacMan.m_gameModel.m_state = GameModel.STATE_HOST;
+			}
+			else{
+				m_pacMan.m_gameModel.m_state = GameModel.STATE_HIGHSCORE;
+			}
 			break;
 			
 		// V is for SOUND

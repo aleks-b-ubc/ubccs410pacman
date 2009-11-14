@@ -26,4 +26,16 @@ C-PacMan -> - new gameModel
 									   				- from here we can go to pause, or die
 									   	- new local multi-player
 									   	- multiplayer
-			
+
+Self notes and ideas.
+What we got: 	Custom packet for any data.
+				Co-Ordinator is the HOST. He is also PACMAN.
+				Person joining is going to be a HumanGhost
+				
+Decision: In multiplayer waiting area. Make the keys show: "H" to host the game.
+			"C" to connect to game.
+			If one selects host - it makes him the controller and the PacMan
+			If one selects to connect - they need to type the IP to which to connect
+			The connection port will be hard coded.
+			For now we will make this 2 player. 3 player can be added later.
+			FOR NOW WILL HARD CODE ALL IP to LOCALHOST!!
