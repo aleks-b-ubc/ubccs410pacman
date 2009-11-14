@@ -2,7 +2,12 @@ import java.awt.*;
 import java.util.*;
 import java.applet.*;
 import java.awt.event.*;
+import java.io.*;
 import java.lang.Math;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 
 @SuppressWarnings("serial")
 public class PacMan extends Applet
@@ -16,9 +21,39 @@ public class PacMan extends Applet
    int            m_globalTickCount = 0;
    
    int            m_ticksPerSec;    // These two variables control game speed    int            m_delay;          // Milliseconds between ticks
-	
+   
+   boolean		  multiplayer;		// This is for keeping track if 
+   									// the game is in multiplayer
+   boolean		  controller;		// This is is for keeping track if this machine
+									// is the controller.
+   
+   DatagramSocket sendSocket;
+   int lastState = 0;				// Because 0 is not used!
+   
+   //TODO: change this. this is for testing
+   int listeningPort = 4444;		//the port on which local machine is listening
+   
+   //Ok, first I will write the sending part of the program. 
+   //So, first thing first. When we go multiplayer we will create a socket
+   //through which this game will broadcast changes in game state
+   //we will not be updating the whole game state, just send changes.
+   //NOTE: Might have to write a new class for the packet, or send everything
+   //down the tube in the raw format. Have to think about it.
+   
+   //FIRST!! Must establish reliable communication, Will create sending socket.
+   //send text updates when ever an event of interest occurs.
+   //for now will impliment it in single player!
+   
+   
    public void init ()
    {
+	   //TODO: DO ONLY IF MULTIPLAYER
+	   try {
+		   sendSocket = new DatagramSocket();
+	   } catch (SocketException e) {
+		   e.printStackTrace();
+	   }	
+	   
       setTicksPerSec (35);
       
       // Create canvases and layout
@@ -61,10 +96,19 @@ public class PacMan extends Applet
       //long temp = System.currentTimeMillis ();      m_globalTickCount++;
       
       //TODO: REMOVE ME
-      System.out.println("TICK! Number: "+ m_globalTickCount);
+      System.out.println("TICK! Number: "+ m_globalTickCount);   
+      
+      
+      //TODO: Send current state!
+      //This method sends the current state to other nodes!
+      try {
+    	  sendState(m_gameModel.m_state);
+      } catch (IOException e) {
+    	  e.printStackTrace();
+      }
       
       switch(m_gameModel.m_state){
-      case GameModel.STATE_MULTIPLAYER_SELECT:
+      case GameModel.STATE_MULTIPLAYER_WAITROOM:
     	  startMultiplayerScreen();
     	  break;
       case GameModel.STATE_INTRO:
@@ -107,7 +151,26 @@ public class PacMan extends Applet
       m_gameUI.repaint();        m_topCanvas.repaint (); 
 	}
    
-   private void showHighScore() {
+	//This sends the current state, BUT only if it has changed.
+   private void sendState(int mState) throws IOException {
+	   
+	  if(mState != lastState){
+		  PacmanDataPacket toSend = new PacmanDataPacket(mState);
+		  ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
+		  ObjectOutputStream out = new ObjectOutputStream(outBuffer);
+		  out.writeObject(toSend);
+		  out.close();
+		  
+		  DatagramPacket packet = new DatagramPacket(outBuffer.toByteArray(), outBuffer.toByteArray().length,
+				InetAddress.getLocalHost(), listeningPort);
+		  sendSocket.send(packet);
+		  
+		  //update lastState variable to the current state
+		  lastState = mState;
+	  }
+	}
+
+private void showHighScore() {
 	   m_soundMgr.stop ();
 	   m_gameModel.m_bIntroInited = false;
 	   m_gameUI.m_bShowIntro = false;
@@ -115,6 +178,7 @@ public class PacMan extends Applet
 	   m_gameUI.m_bShowHighScore = true;
 	   m_gameUI.m_bShowMultiplayer = false;
 	   m_gameUI.m_bRedrawAll = true;
+	   multiplayer = false;
 		
 	}
 
@@ -127,6 +191,7 @@ private void selectColor() {
 	   m_gameUI.m_bShowMultiplayer = false;
 	   m_gameUI.m_bShowColor = true;
 	   m_gameUI.m_bRedrawAll = true;
+	   multiplayer = false;
 	
 }
 
@@ -204,6 +269,7 @@ private void setIntroScreen() {
 	  m_gameUI.m_bShowColor = false;
       m_gameUI.m_bShowMultiplayer = false;
       m_gameUI.m_bShowHighScore = false;
+      multiplayer = false;
  
 }
 
@@ -217,7 +283,9 @@ private void startMultiplayerScreen() {
 	  m_gameUI.m_bShowHighScore = false;
 	  m_gameUI.m_bShowMultiplayer = true;
 	  m_gameUI.m_bShowColor = false;
-	  m_gameUI.m_bRedrawAll = true;	
+	  m_gameUI.m_bRedrawAll = true;
+	  
+	  multiplayer = true;
 }
 
 // Ticked when level has completed
@@ -371,7 +439,7 @@ private void startMultiplayerScreen() {
          } else if (nCollisionCode == 3) // Pacman ate a Fruit
          {
             m_soundMgr.playSound (SoundManager.SOUND_EATFRUIT);
-            break; // Must be eaten one tick at a time // TODO
+            break; // Must be eaten one tick at a time 
          }
       }
       

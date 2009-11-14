@@ -46,9 +46,10 @@ public class GameModel {
 	static final int STATE_NEWGAME = 7; // Initialization of a new game
 	static final int STATE_PAUSED = 8; // Used to pause the game
 	static final int STATE_INTRO = 9; // Intro to game with nice JPEG banner
-	static final int STATE_MULTIPLAYER_SELECT = 10; // Used to go go the Multiplayer waiting page
+	static final int STATE_MULTIPLAYER_WAITROOM = 10; // Used to go go the Multiplayer waiting page
 	static final int STATE_COLOR = 11; // Color selection page
 	static final int STATE_HIGHSCORE = 12; //High score selectino page
+	 
 
 	int[][] m_gameState; // Represents maze as integers
 	int m_gameSizeX;

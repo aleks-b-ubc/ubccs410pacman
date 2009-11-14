@@ -1,0 +1,29 @@
+NOTES:
+
+Data flow of the game:
+
+C-PacMan -> - new gameModel
+				- State set to STATE_INTRO (default)
+				- creates ghosts
+				- creates player
+				- fills the things array
+			- new gameUI
+			- new topCanvas
+			- new bottomCanvas
+		
+			- add key listner
+			- runs the ticker -> first thing game does is STATE_INTRO
+			- then we can go to any of  - highscores
+										- Color change
+									   	- new Single player
+									   		- STATE_NEWGAME
+									   			- run.newgame()
+									   			- state STATE_BEGIN_PLAY
+									   			- tickStateBeginPlay()
+									   			- state STATE_PLAYING
+									   				- tickGamePlay()
+									   				- we are playing the game!
+									   				- from here we can go to pause, or die
+									   	- new local multi-player
+									   	- multiplayer
+			

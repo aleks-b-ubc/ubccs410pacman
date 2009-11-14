@@ -46,6 +46,7 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.DOWN;
 			break;
 
+			//N is for NEW SINGLE PLAYER GAME
 		case KeyEvent.VK_N:
 			// make sure we DO NOT carry over multiplayer state accidently
 			// as such we set multiplayer as false
@@ -54,10 +55,12 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
 			break;
 			
+			//C is for CHOOSING color
 		case KeyEvent.VK_C:
 			m_pacMan.m_gameModel.m_state = GameModel.STATE_COLOR;
 			break;
 
+			//L is for LOCAL MULTIPLAYER
 		case KeyEvent.VK_L:
 			// set Local multiplayer as true.
 			m_pacMan.m_gameModel.localMultiplayer = true;
@@ -65,6 +68,7 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
 			break;
 
+			//P is for PAUSE
 		case KeyEvent.VK_P:
 			if (m_pacMan.m_gameModel.m_state == GameModel.STATE_GAMEOVER)
 				break;
@@ -82,7 +86,7 @@ class pacManKeyAdapter extends KeyAdapter {
 
 		// K is for Multiplayer waiting screen
 		case KeyEvent.VK_M:
-			m_pacMan.m_gameModel.m_state = GameModel.STATE_MULTIPLAYER_SELECT;
+			m_pacMan.m_gameModel.m_state = GameModel.STATE_MULTIPLAYER_WAITROOM;
 			m_pacMan.m_gameModel.m_nTicks2AboutShow = 0;
 			break;
 
