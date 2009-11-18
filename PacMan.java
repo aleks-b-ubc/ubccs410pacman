@@ -25,12 +25,13 @@ public class PacMan extends Applet
    int            m_ticksPerSec;    // These two variables control game speed    int            m_delay;          // Milliseconds between ticks
    
    
-   boolean		  multiplayer;		// This is for keeping track if 
+   boolean		  netMultiplayer;	// This is for keeping track if 
    									// the game is in multiplayer
    boolean		  controller;		// This is is for keeping track if this machine
 									// is the controller.
    boolean		  playerIsGhost;	//Used for multiplayer to determine if
    									//if the player is a ghost
+   boolean		  multiplayerActive = false;//Is active if the game is playing.
 
    ServerSocket serverSocket;
    Socket		sendingSocket;
@@ -85,28 +86,37 @@ public class PacMan extends Applet
    
    // Master ticker that runs various parts of the game   // based on the GameModel's STATE
 	public void tick ()   {
-      //long temp = System.currentTimeMillis ();      m_globalTickCount++;
+      //long temp = System.currentTimeMillis ();      m_globalTickCount++; 
       
-      //TODO: REMOVE ME
-      System.out.println("TICK! Number: "+ m_globalTickCount);   
+      //TODO: REMOVE!
+      System.out.println("Current tick is: "+m_globalTickCount);
       
       //This method sends the current state to other nodes!
-      //but only if the game is multipalyer
-      if(multiplayer)
+      //but only if the game is multipalyer is running AND this is
+      //the controller.
+      if(multiplayerActive)
       {
-    	  try {
-    		  sendState(m_gameModel.m_state);
-    	  } catch (IOException e) {
-    		  e.printStackTrace();
+    	  if(controller){
+    		  try {
+    			  sendModel(m_gameModel);
+    		  } catch (IOException e) {
+    			  e.printStackTrace();
+    		  }
+    	  }
+    	  else{
+    		  	//updateModel();
     	  }
       }
       
       switch(m_gameModel.m_state){
+      case GameModel.STATE_HOSTING:
+    	  acceptConnection();
+    	  break;
       case GameModel.STATE_CONNECT:
     	  connectMultiplayerGame();
     	  break;
-      case GameModel.STATE_HOST:
-    	  hostMultiplayerGame();
+      case GameModel.STATE_SET_UP_CONNECTION:
+    	  setUpHosting();
     	  break;
       case GameModel.STATE_MULTIPLAYER_WAITROOM:
     	  startMultiplayerScreen();
@@ -155,38 +165,60 @@ public class PacMan extends Applet
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void acceptConnection(){
+		//we accept connection, and begind playing
+			try{
+				sendingSocket = serverSocket.accept();
+				
+				out = new ObjectOutputStream(sendingSocket.getOutputStream());
+				multiplayerActive = true;
+				
+				//start new game?
+				m_gameModel.m_state = GameModel.STATE_NEWGAME;
+			
+				//here we need to accept connection and start playing!
+			}
+			catch(IOException e){
+				//If something goes wrong. We just bounce out of multiplayer
+				System.out.println("Shit. Can't accept connection.");
+				netMultiplayer = false;
+				controller = false;	
+			}
+		
+	}
 
-	private void hostMultiplayerGame() {
-		multiplayer = true;
+	private void setUpHosting() {
+		netMultiplayer = true;
 		controller = true;
 		playerIsGhost = false;
 		
 		//create new server socket. Then wait for connection! Simple, no?
 		//Oh, once connection established we create a new output stream
 		//to output the data
-	    try {
+		try {
 			serverSocket = new ServerSocket(listenPort);
+			
+			
 			//Oh. Here we do necessary UI changes. Need to code this in.
-			sendingSocket = serverSocket.accept();
-			out = new ObjectOutputStream(sendingSocket.getOutputStream());
-	    } catch (IOException e) {
+			//Then we accept the connection? 
+			m_gameUI.m_bShowHostingGame = true;
+			
+			m_gameUI.hostingIP = InetAddress.getLocalHost().getHostAddress();
+			m_gameUI.portNumber = Integer.toString(serverSocket.getLocalPort());
+			m_gameUI.m_bRedrawAll = true;
+			
+			m_gameModel.m_state = GameModel.STATE_HOSTING;
+		} catch (IOException e) {
 			e.printStackTrace();
-	    }	
+		}
+
 	}
 
-//This sends the current state, BUT only if it has changed.
-   private void sendState(int mState) throws IOException {
+//This sends the game state. Yes the ENTIRE game state!
+   private void sendModel(GameModel m_gameModel) throws IOException {
 	   
-	  if(mState != lastState){
-		  PacmanDataPacket packetToSend = new PacmanDataPacket(mState);
-		  //next create a object output stream that will use the byteArray stream
-			//write out object to the line!
-			out.writeObject(packetToSend);
-			//out.close();
-		  
-		  //update lastState variable to the current state
-		  lastState = mState;
-	  }
+	 
 	}
 
 private void showHighScore() {
@@ -197,7 +229,7 @@ private void showHighScore() {
 	   m_gameUI.m_bShowHighScore = true;
 	   m_gameUI.m_bShowMultiplayer = false;
 	   m_gameUI.m_bRedrawAll = true;
-	   multiplayer = false;
+	   netMultiplayer = false;
 		
 	}
 
@@ -210,7 +242,7 @@ private void selectColor() {
 	   m_gameUI.m_bShowMultiplayer = false;
 	   m_gameUI.m_bShowColor = true;
 	   m_gameUI.m_bRedrawAll = true;
-	   multiplayer = false;
+	   netMultiplayer = false;
 	
 }
 
@@ -262,10 +294,6 @@ private void gameOver() {
 
 private void startNewGame() {
 	   
-		multiplayer = false;
-		controller = false;
-		playerIsGhost = false;
-	
 	   m_soundMgr.stop ();
        m_gameModel.newGame ();
        m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;
@@ -276,8 +304,7 @@ private void startNewGame() {
        m_gameUI.m_bShowHighScore = false;
        m_gameUI.m_bShowMultiplayer = false;
        m_gameUI.m_bRedrawAll = true;
-       
-       
+       m_gameUI.m_bShowHostingGame = false;    
 	
 }
 
@@ -294,7 +321,7 @@ private void setIntroScreen() {
 	  m_gameUI.m_bShowColor = false;
       m_gameUI.m_bShowMultiplayer = false;
       m_gameUI.m_bShowHighScore = false;
-      multiplayer = false;
+      netMultiplayer = false;
  
 }
 

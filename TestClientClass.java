@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-
+//THIS HAS THE TCP CONNECTION CODE
 
 public class TestClientClass {
 
@@ -53,20 +53,23 @@ public class TestClientClass {
 		PacmanDataPacket received;	
 		
 		PacmanDataPacket packetToSend = new PacmanDataPacket(11);
+		/**
 		
-		//Scanner kbd = new Scanner(System.in);
-		//System.out.println("To send press 1: ");
-		//int choice = kbd.nextInt();
 		
-			
+		Scanner kbd = new Scanner(System.in);
+		System.out.println("To send press 1: ");
+		int choice = kbd.nextInt();	
 		
 		//THIS HAS WORKING CODE TO SEND THE PACKMANPACKET!
-		/**
+		
 		if(choice == 1){
 			//make a server socket, and then accept incoming connection
 			ServerSocket listeningSocket = new ServerSocket(listenPort);
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
+			
 			//hand it over the the main socket
 			Socket socket = listeningSocket.accept();
+			System.out.println(socket.getInetAddress().getHostAddress());
 			
 			//next create a object output stream that will use the byteArray stream
 			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());

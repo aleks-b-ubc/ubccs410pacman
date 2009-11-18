@@ -4,6 +4,7 @@ import java.util.*;
 // GameUI represents the View in an MVC model.  It consists
 // of a single Canvas where the play field, intro, and about is
 // painted into.  
+@SuppressWarnings("serial")
 public class GameUI extends Canvas
 {   int         CELL_LENGTH;
    
@@ -30,7 +31,12 @@ public class GameUI extends Canvas
    boolean     m_bRedrawAll = false;   // Set to true to tell Update to Paint
    boolean     m_bDrawReady = false;   int         m_gridInset;         // Starting painting the maze with this offset   boolean     m_bFlipWallColor  = false;   boolean     m_bDrawGameOver   = false;   boolean     m_bDrawPaused     = false;   boolean     m_bShowColor      = false;
    boolean     m_bShowMultiplayer = false;
-   boolean     m_bShowHighScore = false;   Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
+   boolean     m_bShowHighScore = false;
+   
+   boolean	   m_bShowHostingGame = false;
+   String	   hostingIP;
+   String	   portNumber;
+      Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
       // Variables associated with the intro page   boolean     m_bShowIntro      = true;
    Color pacmanColour = Color.yellow; //This is the default color for packman   
    
@@ -128,6 +134,11 @@ public class GameUI extends Canvas
          paintIntro (g);
          return;
       }
+      
+      if(m_bShowHostingGame){
+    	  paintHostingGame(g);
+    	  return;
+      }
          
       if (m_bShowColor)
       {
@@ -181,11 +192,55 @@ public class GameUI extends Canvas
       g.drawImage (m_offImage, 0, 0, this); 
    }
    
-   private void paintHighScores(Graphics g) {
+   private void paintHostingGame(Graphics g) {
 	   int         x             = 0;
 	      int         y             = 0;
 	      int         width         = 0;
 	      int         stringLength  = 0;
+	      FontMetrics fm;
+	      
+	      m_offGraphics.setColor (Color.black);
+	      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
+	      if (m_imagePacman == null)
+	      {
+	         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+	      }
+	      
+	      // Draw Logo Image
+	      y = 50;
+	      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+	      m_offGraphics.drawImage (m_imagePacman, x, y, this);
+	      
+	      m_offGraphics.setFont (m_font);
+	      m_offGraphics.setColor (Color.white);
+	      fm = m_offGraphics.getFontMetrics();
+	      
+	      m_offGraphics.setColor (Color.white);
+	      x = 10;
+	      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
+	      
+	      m_offGraphics.drawString ("Welcome to Multiplayer!", x, y);
+	      
+	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.drawString ("You are HOSTING a game.", x, y);
+	      
+	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.drawString ("Waiting for connections.", x, y);
+	      
+	      y += fm.getAscent() + fm.getDescent ();
+	      m_offGraphics.drawString ("Your IP address is: "+hostingIP, x, y);
+	      
+	      y += fm.getAscent() + fm.getDescent();
+	      m_offGraphics.drawString("Your port number is: "+portNumber, x, y);
+
+	      // Blitz buffer to screen
+	      g.drawImage (m_offImage, 0, 0, this); 
+	
+}
+
+private void paintHighScores(Graphics g) {
+	   int         x             = 0;
+	      int         y             = 0;
 	      FontMetrics fm;
 	      
 	      m_offGraphics.setColor (Color.black);
@@ -235,8 +290,6 @@ public class GameUI extends Canvas
 public void paintMultiplayer(Graphics g) {
 	   	  int         x             = 0;
 	      int         y             = 0;
-	      int         width         = 0;
-	      int         stringLength  = 0;
 	      FontMetrics fm;
 	      
 	      m_offGraphics.setColor (Color.black);
@@ -270,16 +323,13 @@ public void paintMultiplayer(Graphics g) {
 	       
 	      // Blitz buffer to screen
 	      g.drawImage (m_offImage, 0, 0, this); 
-	      
-	      
-	
+
 }
+
 
 // Displays the Color selection page containing the PAC-MAN banner
    public void paintColour (Graphics g)
    {      int         x             = 0;      int         y             = 0;
-      int         width         = 0;
-      int         stringLength  = 0;
       Font        m_Colorfont = new Font ("Helvetica", Font.BOLD, 18);      FontMetrics fm;      
       m_offGraphics.setColor (Color.black);      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
       if (m_imagePacman == null)
@@ -685,5 +735,7 @@ public void paintMultiplayer(Graphics g) {
       else if (thing.m_lastDeltaLocY > 0 && thing.m_lastLocY != m_gameModel.m_gameSizeY - 1)
          drawGameCell (g, thing.m_lastLocX, thing.m_lastLocY + 1, true);      
       drawGameCell (g, thing.m_lastLocX, thing.m_lastLocY, true);   }
+
+
 }
 

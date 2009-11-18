@@ -29,13 +29,24 @@ C-PacMan -> - new gameModel
 
 Self notes and ideas.
 What we got: 	Custom packet for any data.
-				Co-Ordinator is the HOST. He is also PACMAN.
-				Person joining is going to be a HumanGhost
+				Co-Ordinator is the HOST. He is also PACMAN. for now.
+				Person joining is going to be a HumanGhost.
+				controller broadcasts entire game state via UDP
+				Slaves send updates via TCP.
 				
-Decision: In multiplayer waiting area. Make the keys show: "H" to host the game.
-			"C" to connect to game.
-			If one selects host - it makes him the controller and the PacMan
-			If one selects to connect - they need to type the IP to which to connect
-			The connection port will be hard coded.
-			For now we will make this 2 player. 3 player can be added later.
-			FOR NOW WILL HARD CODE ALL IP to LOCALHOST!!
+
+
+				
+			
+Current progress:	Person can host a game. Hosting functions all work.
+					Host can accept connection and start playing.
+					While playing host updates if game state changes
+
+TODO:				Send updates as ghosts and pacman change directions.
+					Receive updates when human ghost changes directions.
+					
+Part 2:				Need to do the connect to host part
+					Need to accept info packets for all ghosts and pacman
+					Also, need to implement changing game state according
+					To what is received
+			

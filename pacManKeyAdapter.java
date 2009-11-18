@@ -58,6 +58,11 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameModel.localMultiplayer = false;
 			m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
+			
+			m_pacMan.netMultiplayer = false;
+			m_pacMan.multiplayerActive = false;
+			m_pacMan.playerIsGhost = false;
+			m_pacMan.controller = false;
 			break;
 			
 			//C is for CHOOSING color OR Connecting to a game
@@ -76,6 +81,12 @@ class pacManKeyAdapter extends KeyAdapter {
 			m_pacMan.m_gameModel.localMultiplayer = true;
 			m_pacMan.m_gameModel.m_state = GameModel.STATE_NEWGAME;
 			m_pacMan.m_gameUI.m_bDrawPaused = false;
+			
+			m_pacMan.netMultiplayer = false;
+			m_pacMan.multiplayerActive = false;
+			m_pacMan.playerIsGhost = false;
+			m_pacMan.controller = false;
+			
 			break;
 
 			//P is for PAUSE
@@ -104,7 +115,7 @@ class pacManKeyAdapter extends KeyAdapter {
 		case KeyEvent.VK_H:
 			if(m_pacMan.m_gameModel.m_state == GameModel.STATE_MULTIPLAYER_WAITROOM){
 				
-				m_pacMan.m_gameModel.m_state = GameModel.STATE_HOST;
+				m_pacMan.m_gameModel.m_state = GameModel.STATE_SET_UP_CONNECTION;
 			}
 			else{
 				m_pacMan.m_gameModel.m_state = GameModel.STATE_HIGHSCORE;

@@ -49,8 +49,10 @@ public class GameModel {
 	static final int STATE_MULTIPLAYER_WAITROOM = 10; // Used to go go the Multiplayer waiting page
 	static final int STATE_COLOR = 11; // Color selection page
 	static final int STATE_HIGHSCORE = 12; //High score selectino page
-	static final int STATE_HOST = 13;		//Hosting a multiplayer game
-	static final int STATE_CONNECT = 14;	//Connecting to a multiplayer game
+	static final int STATE_SET_UP_CONNECTION = 13;		//Hosting a multiplayer game
+	static final int STATE_HOSTING = 14; //After hosting is complete.
+														//wait for connection
+	static final int STATE_CONNECT = 15;	//Connecting to a multiplayer game
 	
 	 
 

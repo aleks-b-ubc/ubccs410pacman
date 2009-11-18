@@ -28,15 +28,24 @@ public class PacmanDataPacket implements Serializable{
 	*/
 	
 	int currentGameState;
+	GameModel gameModel;
 	
 	public PacmanDataPacket(int gameState){
 		currentGameState = gameState;
 	}
 	
+	public PacmanDataPacket(GameModel model){
+		gameModel = model;
+		currentGameState = gameModel.m_state;
+	}
+
+	
 	public String stateToString(){
 		switch(currentGameState){
-		case GameModel.STATE_HOST:
-			return "STATE_HOST";
+		case GameModel.STATE_HOSTING:
+			return "STATE_HOSTING";
+		case GameModel.STATE_SET_UP_CONNECTION:
+			return "STATE_SET_UP_CONNECTION";
 		case GameModel.STATE_CONNECT:
 			return "STATE_CONNECT";
 	    case GameModel.STATE_MULTIPLAYER_WAITROOM:
