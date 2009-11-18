@@ -21,6 +21,7 @@ public class GameUI extends Canvas
                                 // even in update.  These are here for special cases like
                                 // Powerup pills which are large enough such that passing 
                                 // Ghosts or Pacman could clip them.   GameModel   m_gameModel;   PacMan      m_pacMan;
+   HighScoresModel m_highScoresModel;
    
    // Double buffer members   Image       m_offImage;
    Graphics    m_offGraphics;   Dimension   m_offDim;
@@ -36,7 +37,8 @@ public class GameUI extends Canvas
    GameUI (PacMan pacMan, GameModel gameModel, int width, int height) 
    {      super ();
       setSize (width, height);      m_gameModel = gameModel;
-      m_pacMan    = pacMan;      //CELL_LENGTH = width / (m_gameModel.m_gameSizeX + 1);      CELL_LENGTH = height / (m_gameModel.m_gameSizeY + 1);
+      m_pacMan    = pacMan;
+      m_highScoresModel = new HighScoresModel();      //CELL_LENGTH = width / (m_gameModel.m_gameSizeX + 1);      CELL_LENGTH = height / (m_gameModel.m_gameSizeY + 1);
       m_gridInset = CELL_LENGTH / 2;
       WALL0 = 0;      WALL1 = CELL_LENGTH / 4;      WALL3 = CELL_LENGTH / 2;
       WALL2 = WALL3 - CELL_LENGTH / 8;
@@ -207,6 +209,23 @@ public class GameUI extends Canvas
 	      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
 	      
 	      m_offGraphics.drawString ("HIGH SCORES", x, y);
+	      
+	    //For Testing Only - Still needs to be incorporated
+	      m_highScoresModel.addHighScore(5000, "Anna");
+	      m_highScoresModel.addHighScore(2000, "Bob");
+	      m_highScoresModel.addHighScore(3000, "Adi");
+	      m_highScoresModel.addHighScore(4000, "Danny");
+	      
+	      int count = m_highScoresModel.numberOfHighScores() - 1;
+	      String[] draw = new String[m_highScoresModel.numberOfHighScores()];
+	      draw = m_highScoresModel.forDrawingHighScores();
+	      
+	      while( count >= 0 )
+	      {
+	    	  y = y + 20;
+	    	  m_offGraphics.drawString(draw[count], x, y);
+	    	  count--;
+	      }
 	       
 	      // Blitz buffer to screen
 	      g.drawImage (m_offImage, 0, 0, this); 
