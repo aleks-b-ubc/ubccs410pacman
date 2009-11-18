@@ -1,4 +1,13 @@
-
-<fb:if-is-app-user>
-<APPLET CODE="PacMan.class" WIDTH=600 HEIGHT=450><fb:else> 
-<fb:redirect url="http://www.facebook.com/login.php?v=1.0&api_key=[e7d3ed1695c713a1d57d015b654d1923]&next=[your_canvas_page_URL]&canvas="/> </fb:else> </fb:if-is-app-user>
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+</HEAD>
+<BODY BGCOLOR="BLACK" text="#FFFFFF">
+<table width="200" border="0" align="center">
+  <tr>
+    <td><APPLET CODE="PacMan.class" WIDTH=800 HEIGHT=600><tr><td colspan="2"></td>
+  </tr>
+</table>
+</BODY>
+</HTML>
