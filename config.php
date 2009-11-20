@@ -14,6 +14,6 @@ $pacmanmain = 'http://greentealatte.net/PacMan_ubc/PacMan.php';
 $user = $facebook->require_login();
 
 //catch the exception that gets thrown if the cookie has an invalid session_key in it
-$facebook->redirect($pacmanmain);
+$facebook->redirect($appcallbackurl);
 
 ?>
