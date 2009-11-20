@@ -5,12 +5,9 @@ import java.applet.*;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.Math;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
+import java.net.*;
+
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class PacMan extends Applet
@@ -352,6 +349,29 @@ private void levelComplete() {
 private void gameOver() {
 	   if (m_gameModel.m_nTicks2GameOver == 0)
        {
+		   try {
+				   String name = "";
+				   name=JOptionPane.showInputDialog("Please enter your name");
+				   String msg = "Hello " + name + "!";
+				   JOptionPane.showMessageDialog(null, msg);
+				   
+			   int score = m_gameModel.m_player.m_score;
+			   System.out.println(name);
+			   String query = "http://www.greentealatte.net/highscore.php?action=submit&admin_user=greentea_pacman&admin_pass=wakawaka&name="+name+"&score="+score+"&access_code=1234";
+			   URL url = new URL(query);
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			InputStream in = url.openStream();
+			System.out.println("shoot me");
+			System.out.println(query);
+} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
           if (m_gameModel.m_player.m_score > m_gameModel.m_highScore)
           {
              m_gameModel.m_highScore = m_gameModel.m_player.m_score;
