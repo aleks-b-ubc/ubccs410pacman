@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.sql.*;
 import java.util.*;
 import java.applet.*;
 import java.awt.event.*;
@@ -14,6 +15,12 @@ import java.net.SocketException;
 @SuppressWarnings("serial")
 public class PacMan extends Applet
 {
+	String sqlDB = "greentea_scoretest";
+	String sqlTable = "HighScores";
+	Connection con;
+	 Statement stmt;
+     ResultSet rs;
+   int 		  	  facebookID; //Facebook userID
    GameModel      m_gameModel;
    TopCanvas      m_topCanvas;
    BottomCanvas   m_bottomCanvas;
@@ -48,6 +55,82 @@ public class PacMan extends Applet
    public void init ()
    {
       setTicksPerSec (35);
+      try {
+    	  facebookID = Integer.parseInt(getParameter("uid"));
+         
+          //Register the JDBC driver for MySQL.
+          Class.forName("com.mysql.jdbc.Driver");
+
+          //Define URL of database server for
+          // database named JunkDB on the localhost
+          // with the default port number 3306.
+          String url =
+                "jdbc:mysql://localhost:3306/greentea_scoretest"; //TODO enter database name
+
+          //Get a connection to the database for a
+          // user named facebook with the password
+          // cs410.
+          con =
+                         DriverManager.getConnection(
+                            url,"greentea_pacman", "wakawaka");
+
+          //Display URL and connection information
+          //TODO: remove this prints when testing is finished.
+          System.out.println("URL: " + url);
+          System.out.println("Connection: " + con);
+
+          //Get a Statement object
+          stmt = con.createStatement();
+          
+         /* //As a precaution, delete myTable if it
+          // already exists as residue from a
+          // previous run.  Otherwise, if the table
+          // already exists and an attempt is made
+          // to create it, an exception will be
+          // thrown.
+          try{
+            stmt.executeUpdate("DROP TABLE myTable");
+          }catch(Exception e){
+            System.out.print(e);
+            System.out.println(
+                      "No existing table to delete");
+          }//end catch
+			*/
+          /*//Create a table in the database named
+          // myTable.
+          stmt.executeUpdate(
+                "CREATE TABLE myTable(test_id int," +
+                      "test_val char(15) not null)");
+
+          //Insert some values into the table
+           */
+          stmt.executeUpdate(
+                    "INSERT INTO myTable(test_id, " +
+                        "test_val) VALUES(1,'One')");
+          stmt.executeUpdate(
+                    "INSERT INTO myTable(test_id, " +
+                        "test_val) VALUES(2,'Two')");
+          stmt.executeUpdate(
+                    "INSERT INTO myTable(test_id, " +
+                      "test_val) VALUES(3,'Three')");
+          stmt.executeUpdate(
+                    "INSERT INTO myTable(test_id, " +
+                       "test_val) VALUES(4,'Four')");
+          stmt.executeUpdate(
+                    "INSERT INTO myTable(test_id, " +
+                       "test_val) VALUES(5,'Five')");
+
+          /*//Get another statement object initialized
+          // as shown.
+          stmt = con.createStatement(
+                   ResultSet.TYPE_SCROLL_INSENSITIVE,
+                         ResultSet.CONCUR_READ_ONLY);
+*/
+         
+        }catch( Exception e ) {
+          e.printStackTrace();
+        }//end catch
+
       
       // Create canvases and layout
       m_gameModel = new GameModel (this); 
@@ -380,6 +463,29 @@ private void startMultiplayerScreen() {
    // Ticked when Pacman has died
    public void tickDeadPlay ()
    {
+	   //Get another statement object initialized
+	      // as shown.
+	      try {
+			stmt = con.createStatement(
+			           ResultSet.TYPE_SCROLL_INSENSITIVE,
+			                 ResultSet.CONCUR_READ_ONLY);
+		
+
+	      //Query the database, storing the result
+	      // in an object of type ResultSet
+	      rs = stmt.executeQuery("SELECT high_score " +
+	                "FROM " + sqlTable + " WHERE uid = " + facebookID);
+	      int newScore = m_gameModel.m_player.m_score;
+	      if (newScore > rs.getInt(1)){
+	    	  stmt = con.createStatement();
+	    	  stmt.executeUpdate("UPDATE " + sqlDB + " SET high_scores = " + newScore +
+	    			  " WHERE uid = " + facebookID);
+	      }
+	      } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
       if (m_gameModel.m_nTicks2DeadPlay == 0)
       {
          m_gameModel.setPausedGame (true);
