@@ -1,16 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml"> 
-<head>
-<title></title>
-<body>
-<script type="text/javascript">
-// Popup window code
-function newPopup(url) {
-	popupWindow = window.open(
-		url,'popUpWindow','height=500,width=250,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
-}
-</script>
-
 <?php
 /* include the PHP Facebook Client Library to help
   with the API calls and make life easy */
@@ -40,9 +27,21 @@ $wtf = 'wtf';
 //echo '</pre>';
 ?>
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml"> 
+<head>
+<title>Java Pacman</title>
+<body>
+<script type="text/javascript">
+// Javascript popup window code
+function newPopup(url) {
+	popupWindow = window.open(
+		url,'popUpWindow','height=500,width=250,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+}
+</script>
+
 Hello <?php echo $firstName; ?>! Welcome to Pacman M.D.!
 <a href="JavaScript:newPopup('http://www.greentealatte.net/highscore.php?action=list&access_code=1234');">Check your highscore here!</a>
-
 
 <APPLET CODE="PacMan.class" WIDTH=600 HEIGHT=500>
 <param name=username value="<?php echo $fb_user; ?>">
