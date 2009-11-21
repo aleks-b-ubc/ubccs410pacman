@@ -2,6 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml"> 
 <head>
 <title></title>
+<body>
+<script type="text/javascript">
+// Popup window code
+function newPopup(url) {
+	popupWindow = window.open(
+		url,'popUpWindow','height=500,width=250,left=10,top=10,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+}
+</script>
+
 <?php
 /* include the PHP Facebook Client Library to help
   with the API calls and make life easy */
@@ -20,17 +29,31 @@ $fb_user = $facebook->require_login();
 /* now we will say:
   Hello USER_NAME! Welcome to my first application! */
 
-$user_details = $facebook->api_client->users_getInfo($uid, 'name'); 
-$data['name'] = $user_details['name']; 
-$data['last_name'] = $user_details['last_name']; 
+$user_details = $facebook->api_client->users_getInfo($fb_user, 'first_name, pic_square'); 
+$firstName = $user_details[0]['first_name'];
+$pic_square = $user_details[0]['pic_square'];
+
 $wtf = 'wtf';
+
+//echo '<pre>';
+//print_r($user_details);
+//echo '</pre>';
 ?>
 
-Hello <?php echo $data['name']; ?>! Welcome to my Pacman M.D.!
+Hello <?php echo $firstName; ?>! Welcome to Pacman M.D.!
+<a href="JavaScript:newPopup('http://www.greentealatte.net/highscore.php?action=list&access_code=1234');">Check your highscore here!</a>
+
 
 <APPLET CODE="PacMan.class" WIDTH=600 HEIGHT=500>
-<param name=username value='<?php echo $wtf; ?>' useyou='false' possessive='true' />>
-<PARAM NAME=uid VALUE=<?php echo($pacmanid);?>>
+<param name=username value="<?php echo $fb_user; ?>">
+<param name=firstname value="<?php echo $firstName; ?>">
+<param name=pic_url value="<?php echo $pic_square; ?>">
+
+
+<script type="text/javascript"> 
+FB_RequireFeatures(["XFBML"], function(){ 
+FB.Facebook.init("e7d3ed1695c713a1d57d015b654d1923", "PacMan_ubc/php/xd_receiver.htm"); }); 
+</script> 
 </APPLET>
 
 </body>

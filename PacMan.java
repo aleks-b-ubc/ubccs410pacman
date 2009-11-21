@@ -28,7 +28,7 @@ public class PacMan extends Applet
    
    int            m_ticksPerSec;    // These two variables control game speed    int            m_delay;          // Milliseconds between ticks
    
-   
+   //int name = Integer.parseInt(getParameter("name"));
    boolean		  netMultiplayer;	// This is for keeping track if 
    									// the game is in multiplayer
    boolean		  controller;		// This is is for keeping track if this machine
@@ -350,14 +350,18 @@ private void gameOver() {
 	   if (m_gameModel.m_nTicks2GameOver == 0)
        {
 		   try {
-				   String name = "";
-				   name=JOptionPane.showInputDialog("Please enter your name");
-				   String msg = "Hello " + name + "!";
-				   JOptionPane.showMessageDialog(null, msg);
-				   
+//				   String name = "";
+//				   name=JOptionPane.showInputDialog("Please enter your name");
+//				   String msg = "Hello " + name + "!";
+//				   JOptionPane.showMessageDialog(null, msg);
+//				   
+//			   System.out.println(name);
+			   String name   = this.getParameter("username");
+			   String firstname   = this.getParameter("firstname");
+			   String pic_url   = this.getParameter("pic_url");
+
 			   int score = m_gameModel.m_player.m_score;
-			   System.out.println(name);
-			   String query = "http://www.greentealatte.net/highscore.php?action=submit&admin_user=greentea_pacman&admin_pass=wakawaka&name="+name+"&score="+score+"&access_code=1234";
+			   String query = "http://www.greentealatte.net/highscore.php?action=submit&admin_user=greentea_pacman&admin_pass=wakawaka&picurl="+pic_url+"&firstname="+firstname+"&name="+name+"&score="+score+"&access_code=1234";
 			   URL url = new URL(query);
 			URLConnection conn = url.openConnection();
 			conn.connect();
@@ -485,26 +489,7 @@ private void startMultiplayerScreen() {
    {
 	   //Get another statement object initialized
 	      // as shown.
-	      try {
-			stmt = con.createStatement(
-			           ResultSet.TYPE_SCROLL_INSENSITIVE,
-			                 ResultSet.CONCUR_READ_ONLY);
-		
-
-	      //Query the database, storing the result
-	      // in an object of type ResultSet
-	      rs = stmt.executeQuery("SELECT high_score " +
-	                "FROM " + sqlTable + " WHERE uid = " + facebookID);
-	      int newScore = m_gameModel.m_player.m_score;
-	      if (newScore > rs.getInt(1)){
-	    	  stmt = con.createStatement();
-	    	  stmt.executeUpdate("UPDATE " + sqlDB + " SET high_scores = " + newScore +
-	    			  " WHERE uid = " + facebookID);
-	      }
-	      } catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	   
 
       if (m_gameModel.m_nTicks2DeadPlay == 0)
       {
