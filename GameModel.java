@@ -1,11 +1,13 @@
 import java.awt.*;
+import java.io.Serializable;
 
 // GameState is primarly maintained by the int[][] m_gameState
 // 2D array where each integer is a location in the maze.  Integers
 // consists of GameState Values ORd together.  By using bitwise
 // operations, looking up and manipulating the gamestate can be done
 // quickly.
-public class GameModel {
+@SuppressWarnings("serial")
+public class GameModel implements Serializable{
 	// Gamestate Values
 	// GS_**** where in this location, a wall exists in the **** direction.
 	static final int GS_NORTH = 1 << 0;

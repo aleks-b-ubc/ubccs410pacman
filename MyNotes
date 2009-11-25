@@ -26,6 +26,16 @@ C-PacMan -> - new gameModel
 									   				- from here we can go to pause, or die
 									   	- new local multi-player
 									   	- multiplayer
+									   		- host game
+									   			*create a update socket
+									   			*create a server socket
+									   			- accept connection
+									   			- begin play
+									   		- connect to game
+									   			- connect
+									   				*create a gamestate listen socket
+									   				*create an update socket
+									   			- begin play
 
 Self notes and ideas.
 What we got: 	Custom packet for any data.
@@ -42,7 +52,7 @@ Current progress:	Person can host a game. Hosting functions all work.
 					Host can accept connection and start playing.
 					While playing host updates if game state changes
 
-TODO:				Send updates as ghosts and pacman change directions.
+TODO:				Send updates as the entire game state
 					Receive updates when human ghost changes directions.
 					
 Part 2:				Need to do the connect to host part

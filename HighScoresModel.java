@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class HighScoresModel {
+public class HighScoresModel implements Serializable{
 
 	private static HashMap highScores = new HashMap<Integer, String>();
 

@@ -36,15 +36,16 @@ public class PacMan extends Applet {
 	// if the player is a ghost
 	boolean multiplayerActive = false;// Is active if the game is playing.
 
-	ServerSocket serverSocket;
-	Socket sendingSocket;
-	ObjectOutputStream out;
-	int lastState = 0; // This is used in updating the games current
-	// state
+	ServerSocket serverSocket; //this is for accepting connections
+	Socket tcpSocket; //this is for receiving updates from slaves
+	MulticastSocket updateSocket; //this is for sending game updates
+	String group = "224.0.0.1"; // this is the group for broadcasting
 
-	// TODO: change this. this is for testing
 	int listenPort = 4444; // the port on which local machine is listening
-
+	int updateSendPort = 5555; // the port on which local machine is sending updates
+	int updateListenPort = 6666; //the port on which machines listen for updates
+	
+	
 	public void init() {
 		setTicksPerSec(35);
 		try {
@@ -165,6 +166,7 @@ public class PacMan extends Applet {
 					e.printStackTrace();
 				}
 			} else {
+				//TODO: DO THIS!!
 				// updateModel();
 			}
 		}
@@ -232,9 +234,7 @@ public class PacMan extends Applet {
 	private void acceptConnection() {
 		// we accept connection, and begind playing
 		try {
-			sendingSocket = serverSocket.accept();
-
-			out = new ObjectOutputStream(sendingSocket.getOutputStream());
+			tcpSocket = serverSocket.accept();
 			multiplayerActive = true;
 
 			// start new game?
@@ -255,13 +255,15 @@ public class PacMan extends Applet {
 		controller = true;
 		playerIsGhost = false;
 
-		// create new server socket. Then wait for connection! Simple, no?
-		// Oh, once connection established we create a new output stream
-		// to output the data
+		
 		try {
+			//create a new server socket for accepting connections from slaves
 			serverSocket = new ServerSocket(listenPort);
+			
+			//Also initialize the update socket for SENDING
+			updateSocket = new MulticastSocket(updateSendPort);
 
-			// Oh. Here we do necessary UI changes. Need to code this in.
+			// Oh. Here we do necessary UI changes
 			// Then we accept the connection?
 			m_gameUI.m_bShowHostingGame = true;
 
@@ -277,8 +279,22 @@ public class PacMan extends Applet {
 	}
 
 	// This sends the game state. Yes the ENTIRE game state!
-	private void sendModel(GameModel m_gameModel) throws IOException {
+	private void sendModel(GameModel gameModel) throws IOException {
 
+		//make a packet with the current game model
+		PacmanDataPacket toSend = new PacmanDataPacket(gameModel);
+
+		
+		//write it out
+        ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(outBuffer);
+        out.writeObject(toSend);
+        out.close();
+        
+        //sending a datagram packet to the multicast group
+        DatagramPacket packet = new DatagramPacket(outBuffer.toByteArray(), outBuffer.toByteArray().length,
+                        InetAddress.getByName(group), updateListenPort);
+        updateSocket.send(packet);
 	}
 
 	private void showHighScore() {

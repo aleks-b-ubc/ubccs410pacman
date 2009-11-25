@@ -45,8 +45,9 @@ public class TestClientClass {
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
 		//TestClientClass theClient = new TestClientClass();
-		int listenPort = 4444;
-		int sendPort = 5555;
+		int listenPort = 4444; // the port on which local machine is listening
+		int updateSendPort = 5555; // the port on which local machine is sending updates
+		int updateListenPort = 6666;
 		
 
 		//This is here to show that communication is working!

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.*;
 import java.util.Scanner;
 
@@ -44,15 +45,19 @@ public class TestClientClass2 {
         public static void main(String[] args) throws IOException, ClassNotFoundException {
                 
                 //TestClientClass theClient = new TestClientClass();
-                int listenPort = 4444;
-                int sendPort = 5555;
+        		int listenPort = 4444; // the port on which local machine is listening
+        		int updateSendPort = 5555; // the port on which local machine is sending updates
+        		int updateListenPort = 6666;
                 String group = "224.0.0.1";
                 
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[65536];
                 
 
                 //This is here to show that communication is working!
+                
                 PacmanDataPacket received;      
+                //testPacket received;
+                
                 
                 /**
                 Scanner kbd = new Scanner(System.in);
@@ -67,11 +72,16 @@ public class TestClientClass2 {
                 	
                      System.out.println("enter state: ");
                      int state = kbd.nextInt();
-                	
-                		PacmanDataPacket toSend = new PacmanDataPacket(state);
+                	 
+                     
+                		//PacmanDataPacket toSend = new PacmanDataPacket(state);
+                     	int[] array = {state, state, state};
+                		testPacket toSend = new testPacket();
+                		toSend.test = array;
+                		
                 		//make a new socket
                         //DatagramSocket sendSocket = new DatagramSocket(sendPort);
-                		MulticastSocket sendSocket = new MulticastSocket(sendPort);
+                		MulticastSocket sendSocket = new MulticastSocket(updateSendPort);
                 		
                 	
                         ByteArrayOutputStream outBuffer = new ByteArrayOutputStream();
@@ -81,17 +91,17 @@ public class TestClientClass2 {
                         
                         //sending a datagram packet to the multicast ip
                         DatagramPacket packet = new DatagramPacket(outBuffer.toByteArray(), outBuffer.toByteArray().length,
-                                        InetAddress.getByName(group), listenPort);
+                                        InetAddress.getByName(group), updateListenPort);
                         sendSocket.send(packet);
                         
                         
                 }
                 else{
-                */
                 
+                */
                 //make a socket        
                 //DatagramSocket listenSocket = new DatagramSocket(listenPort);
-                MulticastSocket listenSocket = new MulticastSocket(listenPort);
+                MulticastSocket listenSocket = new MulticastSocket(updateListenPort);
                 //join the local group.
                 listenSocket.joinGroup(InetAddress.getByName(group));
                 
@@ -109,8 +119,15 @@ public class TestClientClass2 {
                         System.out.println(received.stateToString());
                 }
         
-        
                 
+                    
      }
 
+}
+
+class testPacket implements Serializable{
+	int[] test;
+	testPacket(){
+		
+	}
 }

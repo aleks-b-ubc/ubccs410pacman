@@ -1,7 +1,9 @@
 import java.awt.*;
+import java.io.Serializable;
 
 // Pacman and Ghosts
-public class Thing
+@SuppressWarnings("serial")
+public class Thing implements Serializable
 {
    // Thing's next step is one of these constants
    static final byte STILL = 0;
