@@ -43,20 +43,16 @@ What we got: 	Custom packet for any data.
 				Person joining is going to be a HumanGhost.
 				controller broadcasts entire game state via UDP
 				Slaves send updates via TCP.
-				
-
-
-				
+								
 			
 Current progress:	Person can host a game. Hosting functions all work.
 					Host can accept connection and start playing.
-					While playing host updates if game state changes
+					While playing controller sends the game state info
+					with every tick.
+					Update Slave Model 
 
-TODO:				Send updates as the entire game state
-					Receive updates when human ghost changes directions.
+TODO:				Receive updates when human ghost changes directions.
+					Need to send updates when characters change direction (slave)
+					Connect to a hosting game (slave)
 					
-Part 2:				Need to do the connect to host part
-					Need to accept info packets for all ghosts and pacman
-					Also, need to implement changing game state according
-					To what is received
 			

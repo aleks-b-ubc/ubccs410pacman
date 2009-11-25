@@ -162,12 +162,13 @@ public class PacMan extends Applet {
 			if (controller) {
 				try {
 					sendModel(m_gameModel);
+					//TODO: get updates from slave nodes
+					//updateController
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			} else {
-				//TODO: DO THIS!!
-				// updateModel();
+				updateSlaveModel();
 			}
 		}
 
@@ -226,9 +227,149 @@ public class PacMan extends Applet {
 		m_topCanvas.repaint();
 	}
 
-	private void connectMultiplayerGame() {
-		// TODO Auto-generated method stub
+	
+	//here is where we update the game model!
+	
+	private void updateSlaveModel(){
+		
+		byte[] buffer = new byte[65536];
+        PacmanDataPacket received;
+        
+        //try this on for size! 
+		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+        try {
+			updateSocket.receive(packet);
+			ByteArrayInputStream inBuffer = new ByteArrayInputStream(packet.getData());
+	        ObjectInputStream in = new ObjectInputStream(inBuffer);
+	        received = (PacmanDataPacket) in.readObject();
 
+	        m_gameModel.m_state = received.state;
+	        m_gameModel.m_gameState = received.gameState; 
+	        m_gameModel.m_gameSizeX = received.gameSizeX;
+	        m_gameModel.m_gameSizeY = received.gameSizeY;
+	        m_gameModel.m_stage = received.stage; 
+	        m_gameModel.m_pausedState = received.pausedState;
+			
+	        setFruit(received);
+	        setGhosts(received);
+	        setThings(received);
+	        
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void setThings(PacmanDataPacket received) {
+		for(int i = 0; i < received.things.length; i++){	
+			m_gameModel.m_things[i].m_bPaused = received.things[i].m_bPaused;
+			m_gameModel.m_things[i].m_bInsideRoom = received.things[i].m_bInsideRoom;
+			m_gameModel.m_things[i].m_bVisible = received.things[i].m_bVisible;
+			m_gameModel.m_things[i].m_deltaLocX = received.things[i].m_deltaLocX;
+			m_gameModel.m_things[i].m_deltaLocY = received.things[i].m_deltaLocY;
+			m_gameModel.m_things[i].m_deltaStartX = received.things[i].m_deltaStartX;
+			m_gameModel.m_things[i].m_direction = received.things[i].m_direction;
+			m_gameModel.m_things[i].m_lastDeltaLocX = received.things[i].m_lastDeltaLocX;
+			m_gameModel.m_things[i].m_lastDeltaLocY = received.things[i].m_lastDeltaLocY;
+			m_gameModel.m_things[i].m_lastLocX = received.things[i].m_locX;
+			m_gameModel.m_things[i].m_lastLocY = received.things[i].m_locY;
+			m_gameModel.m_things[i].m_locX = received.things[i].m_locX;
+			m_gameModel.m_things[i].m_locY = received.things[i].m_locY;
+			m_gameModel.m_things[i].m_startX = received.things[i].m_startX;
+			m_gameModel.m_things[i].m_startY = received.things[i].m_startY;
+		}
+	}
+
+	private void setGhosts(PacmanDataPacket received) {
+		for(int i = 0; i < received.ghosts.length; i++){
+			
+			m_gameModel.m_ghosts[i].m_bCanBackTrack = received.ghosts[i].m_bCanBackTrack;
+			m_gameModel.m_ghosts[i].m_bCanFollow = received.ghosts[i].m_bCanFollow;
+			m_gameModel.m_ghosts[i].m_bCanPredict = received.ghosts[i].m_bCanPredict;
+			m_gameModel.m_ghosts[i].m_bCanUseNextBest = received.ghosts[i].m_bCanUseNextBest;
+			m_gameModel.m_ghosts[i].m_bEaten = received.ghosts[i].m_bEaten;
+			m_gameModel.m_ghosts[i].m_bEnteringDoor = received.ghosts[i].m_bEnteringDoor;
+			m_gameModel.m_ghosts[i].m_bInsaneAI = received.ghosts[i].m_bInsaneAI;
+			m_gameModel.m_ghosts[i].m_bOtherPolygon = received.ghosts[i].m_bOtherPolygon;
+			m_gameModel.m_ghosts[i].m_destinationX = received.ghosts[i].m_destinationX;
+			m_gameModel.m_ghosts[i].m_destinationY = received.ghosts[i].m_destinationY;
+			m_gameModel.m_ghosts[i].m_eatenPoints = received.ghosts[i].m_eatenPoints;
+			m_gameModel.m_ghosts[i].m_ghostDeltaMax = received.ghosts[i].m_ghostDeltaMax;
+			m_gameModel.m_ghosts[i].m_ghostMouthX = received.ghosts[i].m_ghostMouthX;
+			m_gameModel.m_ghosts[i].m_ghostMouthY = received.ghosts[i].m_ghostMouthY;
+			m_gameModel.m_ghosts[i].m_lastDirection = received.ghosts[i].m_lastDirection;
+			m_gameModel.m_ghosts[i].m_nExitMilliSec = received.ghosts[i].m_nExitMilliSec;
+			m_gameModel.m_ghosts[i].m_nTicks2Exit = received.ghosts[i].m_nTicks2Exit;
+			m_gameModel.m_ghosts[i].m_nTicks2Flee = received.ghosts[i].m_nTicks2Flee;
+			m_gameModel.m_ghosts[i].m_nTicks2Popup = received.ghosts[i].m_nTicks2Popup;
+			
+			m_gameModel.m_ghosts[i].m_bPaused = received.ghosts[i].m_bPaused;
+			m_gameModel.m_ghosts[i].m_bInsideRoom = received.ghosts[i].m_bInsideRoom;
+			m_gameModel.m_ghosts[i].m_bVisible = received.ghosts[i].m_bVisible;
+			m_gameModel.m_ghosts[i].m_deltaLocX = received.ghosts[i].m_deltaLocX;
+			m_gameModel.m_ghosts[i].m_deltaLocY = received.ghosts[i].m_deltaLocY;
+			m_gameModel.m_ghosts[i].m_deltaStartX = received.ghosts[i].m_deltaStartX;
+			m_gameModel.m_ghosts[i].m_direction = received.ghosts[i].m_direction;
+			m_gameModel.m_ghosts[i].m_lastDeltaLocX = received.ghosts[i].m_lastDeltaLocX;
+			m_gameModel.m_ghosts[i].m_lastDeltaLocY = received.ghosts[i].m_lastDeltaLocY;
+			m_gameModel.m_ghosts[i].m_lastLocX = received.ghosts[i].m_locX;
+			m_gameModel.m_ghosts[i].m_lastLocY = received.ghosts[i].m_locY;
+			m_gameModel.m_ghosts[i].m_locX = received.ghosts[i].m_locX;
+			m_gameModel.m_ghosts[i].m_locY = received.ghosts[i].m_locY;
+			m_gameModel.m_ghosts[i].m_startX = received.ghosts[i].m_startX;
+			m_gameModel.m_ghosts[i].m_startY = received.ghosts[i].m_startY;
+		}
+	}
+
+	private void setFruit(PacmanDataPacket received) {
+		
+		   m_gameModel.m_fruit.m_destinationX = received.fruit.m_destinationX;
+		   m_gameModel.m_fruit.m_destinationY = received.fruit.m_destinationY;
+		   m_gameModel.m_fruit.m_bAvailable = received.fruit.m_bAvailable;     
+		   m_gameModel.m_fruit.m_nTicks2Show = received.fruit.m_nTicks2Show;
+		   m_gameModel.m_fruit.m_nTicks2Hide = received.fruit.m_nTicks2Hide;
+		   m_gameModel.m_fruit.m_bounceCount = received.fruit.m_bounceCount;
+		   m_gameModel.m_fruit.m_nTicks2Popup = received.fruit.m_nTicks2Popup;
+		   m_gameModel.m_fruit.m_eatenPoints = received.fruit.m_eatenPoints;
+		   
+		   m_gameModel.m_fruit.m_bPaused = received.fruit.m_bPaused;
+		   m_gameModel.m_fruit.m_bInsideRoom = received.fruit.m_bInsideRoom;
+		   m_gameModel.m_fruit.m_bVisible = received.fruit.m_bVisible;
+		   m_gameModel.m_fruit.m_deltaLocX = received.fruit.m_deltaLocX;
+		   m_gameModel.m_fruit.m_deltaLocY = received.fruit.m_deltaLocY;
+		   m_gameModel.m_fruit.m_deltaStartX = received.fruit.m_deltaStartX;
+		   m_gameModel.m_fruit.m_direction = received.fruit.m_direction;
+		   m_gameModel.m_fruit.m_lastDeltaLocX = received.fruit.m_lastDeltaLocX;
+		   m_gameModel.m_fruit.m_lastDeltaLocY = received.fruit.m_lastDeltaLocY;
+		   m_gameModel.m_fruit.m_lastLocX = received.fruit.m_locX;
+		   m_gameModel.m_fruit.m_lastLocY = received.fruit.m_locY;
+		   m_gameModel.m_fruit.m_locX = received.fruit.m_locX;
+		   m_gameModel.m_fruit.m_locY = received.fruit.m_locY;
+		   m_gameModel.m_fruit.m_startX = received.fruit.m_startX;
+		   m_gameModel.m_fruit.m_startY = received.fruit.m_startY;
+		
+	}
+
+	private void connectMultiplayerGame() {
+		netMultiplayer = true;
+		controller = false;
+		playerIsGhost = true;
+		
+		try {
+			//initialize the socket over which slave receive updates
+			updateSocket = new MulticastSocket(updateListenPort);
+			updateSocket.joinGroup(InetAddress.getByName(group));
+			//initialize the socket over which slave send updates
+			//TODO: MAKE THIS CHANGABLE!!! 
+			tcpSocket = new Socket(InetAddress.getLocalHost(), listenPort);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//once connections are opened, we start the game!
+		m_gameModel.m_state = GameModel.STATE_NEWGAME;
+		
 	}
 
 	private void acceptConnection() {
@@ -376,10 +517,8 @@ public class PacMan extends Applet {
 				// insert fail, 1 - insert success
 				// System.out.println(query);
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
