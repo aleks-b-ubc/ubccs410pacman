@@ -21,6 +21,7 @@ public class PacMan extends Applet {
 	TopCanvas m_topCanvas;
 	BottomCanvas m_bottomCanvas;
 	GameUI m_gameUI;
+	HighScoresModel m_highScoresModel;
 	Ticker m_ticker; // Used to update the game state and UI
 	SoundManager m_soundMgr;
 	int m_globalTickCount = 0;
@@ -115,7 +116,8 @@ public class PacMan extends Applet {
 
 		// Create canvases and layout
 		m_gameModel = new GameModel(this);
-		m_gameUI = new GameUI(this, m_gameModel, 409, 450);
+		m_highScoresModel = new HighScoresModel();
+		m_gameUI = new GameUI(this, m_gameModel, m_highScoresModel, 409, 450);
 		m_topCanvas = new TopCanvas(m_gameModel, 200, 200);
 		m_bottomCanvas = new BottomCanvas(this, m_gameModel, 200, 250);
 
@@ -526,6 +528,7 @@ public class PacMan extends Applet {
 				m_gameModel.m_highScore = m_gameModel.m_player.m_score;
 				m_topCanvas.repaint();
 			}
+			m_highScoresModel.addHighScore(m_gameModel.m_player.m_score, this.getParameter("username"));
 		}
 
 		m_gameModel.m_nTicks2GameOver++;

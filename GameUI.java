@@ -40,11 +40,11 @@ public class GameUI extends Canvas
       // Variables associated with the intro page   boolean     m_bShowIntro      = true;
    Color pacmanColour = Color.yellow; //This is the default color for packman   
    
-   GameUI (PacMan pacMan, GameModel gameModel, int width, int height) 
+   GameUI (PacMan pacMan, GameModel gameModel, HighScoresModel scoresModel, int width, int height) 
    {      super ();
       setSize (width, height);      m_gameModel = gameModel;
       m_pacMan    = pacMan;
-      m_highScoresModel = new HighScoresModel();      //CELL_LENGTH = width / (m_gameModel.m_gameSizeX + 1);      CELL_LENGTH = height / (m_gameModel.m_gameSizeY + 1);
+      m_highScoresModel = scoresModel;      //CELL_LENGTH = width / (m_gameModel.m_gameSizeX + 1);      CELL_LENGTH = height / (m_gameModel.m_gameSizeY + 1);
       m_gridInset = CELL_LENGTH / 2;
       WALL0 = 0;      WALL1 = CELL_LENGTH / 4;      WALL3 = CELL_LENGTH / 2;
       WALL2 = WALL3 - CELL_LENGTH / 8;
@@ -345,6 +345,8 @@ public void paintMultiplayer(Graphics g) {
             m_offGraphics.setColor (Color.white);
       x = 10;      y = m_gridInset + 10 * CELL_LENGTH + CELL_LENGTH / 2 + fm.getAscent() / 2;
       m_offGraphics.drawString ("Welcome to PAC-MAN in Java!", x, y);
+      
+      // Calculate x,y offsets and generate color selection menu
             y += fm.getAscent() + fm.getDescent ();      y += fm.getAscent() + fm.getDescent ();
       y += fm.getAscent() + fm.getDescent ();
       y += fm.getAscent() + fm.getDescent ();
