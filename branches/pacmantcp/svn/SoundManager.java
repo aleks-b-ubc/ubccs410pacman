@@ -1,4 +1,4 @@
-import java.applet.*;
+package branches.pacmantcp.svn;import java.applet.*;
 import java.net.URL;
 
 //Loads and holds a bunch of audio files whose locations are specified

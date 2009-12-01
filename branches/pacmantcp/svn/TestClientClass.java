@@ -1,4 +1,4 @@
-import java.awt.*;
+package branches.pacmantcp.svn;import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;

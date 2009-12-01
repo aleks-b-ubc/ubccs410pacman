@@ -34,7 +34,7 @@ public class GameUI extends Canvas
    boolean     m_bShowHighScore = false;
    
    boolean	   m_bShowHostingGame = false;
-   String	   hostingIP;
+   String	   hostingIP; //this is set when we host a game. and is displayed.
    String	   portNumber;
       Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
       // Variables associated with the intro page   boolean     m_bShowIntro      = true;

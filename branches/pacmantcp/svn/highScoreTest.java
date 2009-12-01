@@ -1,4 +1,4 @@
-
+package branches.pacmantcp.svn;
 import junit.framework.TestCase;
 
 public class highScoreTest extends TestCase{

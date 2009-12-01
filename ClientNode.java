@@ -5,14 +5,13 @@ import java.net.MulticastSocket;
 
 public class ClientNode extends Node{
 
-	private PacMan m_pacMan;
-	private GameModel m_gameModel;
 
-	public ClientNode(PacMan m_pacMan){
+	public ClientNode(PacMan pacMan){
 		super();
-		this.m_pacMan = m_pacMan;
-		this.m_gameModel = m_pacMan.m_gameModel;
-		this.coord = false;
+		m_pacMan = pacMan;
+		m_gameModel = pacMan.m_gameModel;
+		m_pacMan.controller = false;
+
 	}
 	
 	public  void connectMultiplayerGame() {
@@ -32,7 +31,7 @@ public class ClientNode extends Node{
 			e.printStackTrace();
 		}*/
 		//once connections are opened, we start the game!
-		m_gameModel.m_state = GameModel.STATE_NEWGAME;
+		//m_gameModel.m_state = GameModel.STATE_NEWGAME;
 		ClientWorker cw;
 		cw = new ClientWorker(m_gameModel);
 	    Thread t2 = new Thread(cw);

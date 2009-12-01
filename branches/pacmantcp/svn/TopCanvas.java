@@ -1,4 +1,4 @@
-import java.awt.*;
+package branches.pacmantcp.svn;import java.awt.*;
 import java.util.*;
 // Top Right Canvas which is repainted many times because// it contains the Score string.
 class TopCanvas extends Canvas{

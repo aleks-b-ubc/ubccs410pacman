@@ -1,4 +1,4 @@
-
+package branches.pacmantcp.svn;
 
 // Ticker thread that updates the game state and refreshes the UI
 // 

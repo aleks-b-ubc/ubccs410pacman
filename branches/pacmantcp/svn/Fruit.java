@@ -1,3 +1,5 @@
+package branches.pacmantcp.svn;
+
 import java.awt.*;
 
 class Fruit extends Thing

@@ -1,3 +1,5 @@
+package branches.pacmantcp.svn;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;

@@ -11,7 +11,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class PacMan extends Applet {
-	ServerNode serverNode;
+	
 	String sqlDB = "greentea_scoretest";
 	String sqlTable = "HighScores";
 	Connection con;
@@ -44,10 +44,11 @@ public class PacMan extends Applet {
 	MulticastSocket updateSocket; //this is for sending game updates
 	String group = "224.0.0.1"; // this is the group for broadcasting
 
-	static int listenPort = 45452; // the port on which local machine is listening
+	int listenPort = 45452; // the port on which local machine is listening
 	int updateSendPort = 5555; // the port on which local machine is sending updates
 	int updateListenPort = 6666; //the port on which machines listen for updates
-	private ClientNode clientNode;
+	ClientNode clientNode;
+	ServerNode serverNode;
 	
 	
 	public synchronized void init() {
@@ -98,7 +99,7 @@ public class PacMan extends Applet {
 		// This method sends the current state to other nodes!
 		// but only if the game is multipalyer is running AND this is
 		// the controller.
-		/*if (multiplayerActive) {
+		if (multiplayerActive) {
 			if (controller) {
 				try {
 					sendModel(m_gameModel);
@@ -110,7 +111,7 @@ public class PacMan extends Applet {
 			} else {
 				updateSlaveModel();
 			}
-		}*/
+		}
 
 		switch (m_gameModel.m_state) {
 		case GameModel.STATE_HOSTING:

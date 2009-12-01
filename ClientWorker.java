@@ -1,5 +1,8 @@
+import java.awt.Component;
 import java.io.*;
 import java.net.*;
+
+import javax.swing.JOptionPane;
 
 
 public class ClientWorker implements Runnable{
@@ -16,7 +19,12 @@ public class ClientWorker implements Runnable{
 		try{
 			byte lastDirection = -1;
 			byte newDirection;
-		tcpSocket = new Socket("localhost", 4444);
+			
+			Component frame = null;
+			String input = JOptionPane.showInputDialog(frame,
+			"Please enter the IP and port in the format xxx.xxx.xxx.xxx");
+
+		tcpSocket = new Socket(input, 4444);
 		   PrintWriter out = new PrintWriter(tcpSocket.getOutputStream(), true);
 		   while (true)
 		   {

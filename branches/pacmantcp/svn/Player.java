@@ -1,4 +1,4 @@
-import java.awt.*;
+package branches.pacmantcp.svn;import java.awt.*;
 
 class Player extends Thing
 {
