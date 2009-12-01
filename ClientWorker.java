@@ -20,11 +20,7 @@ public class ClientWorker implements Runnable{
 			byte lastDirection = -1;
 			byte newDirection;
 			
-			Component frame = null;
-			String input = JOptionPane.showInputDialog(frame,
-			"Please enter the IP and port in the format xxx.xxx.xxx.xxx");
 
-		tcpSocket = new Socket(input, 4444);
 		   PrintWriter out = new PrintWriter(tcpSocket.getOutputStream(), true);
 		   while (true)
 		   {

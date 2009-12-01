@@ -44,7 +44,7 @@ public class PacMan extends Applet {
 	MulticastSocket updateSocket; //this is for sending game updates
 	String group = "224.0.0.1"; // this is the group for broadcasting
 
-	int listenPort = 45452; // the port on which local machine is listening
+	int serverListenPort = 45452; // the port on which local machine is listening
 	int updateSendPort = 5555; // the port on which local machine is sending updates
 	int updateListenPort = 6666; //the port on which machines listen for updates
 	ClientNode clientNode;

@@ -60,11 +60,11 @@ public class ServerNode extends Node{
 	public void setUpHosting() {
 		m_pacMan.netMultiplayer = true;
 		m_pacMan.controller = true;
-		//m_pacMan.playerIsGhost = false;
+		m_pacMan.playerIsGhost = false;
 
 		try {
 			//create a new server socket for accepting connections from slaves
-			m_pacMan.serverSocket = new ServerSocket(m_pacMan.listenPort);
+			m_pacMan.serverSocket = new ServerSocket(m_pacMan.serverListenPort);
 			
 			//Also initialize the update socket for SENDING
 		    m_pacMan.updateSocket  = new MulticastSocket(m_pacMan.updateSendPort);
