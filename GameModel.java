@@ -346,12 +346,15 @@ public class GameModel implements Serializable{
 
 		// If the game is going to be multiplayer, we set the ghost as human.
 		// Else it's an AI.
-		if (localMultiplayer || m_pacMan.netMultiplayer==true) {
+		if (localMultiplayer) {
 			m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 13, 11, true,
 					Color.red, 0);
 			m_ghosts[0] = m_ghostPlayer;
 		}
-		if (m_pacMan.netMultiplayer==true) {
+		else if (m_pacMan.netMultiplayer) {
+			m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 13, 11, true,
+					Color.red, 0);
+			m_ghosts[0] = m_ghostPlayer;
 			m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 12, 14, false, Color.pink,
 					2000);
 			m_ghosts[1] = m_ghostPlayer;
