@@ -2,6 +2,7 @@ import java.awt.*;
 
 
 public class Ghost extends Thing{
+	byte     m_requestedDirection = STILL;
 	 int[]    m_ghostMouthX;    // X points of Ghost's crooked mouth when Pacman powersup
 	   int[]    m_ghostMouthY;    // Y points of Ghost's crooked mouth when Pacman powersup
 	   Polygon  m_ghostPolygon;   // Alternate between these two polygons to draw the ghost

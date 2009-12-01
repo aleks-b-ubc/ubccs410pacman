@@ -2,7 +2,7 @@ import java.awt.*;
 
 
 public class GhostPlayer extends Ghost{
-	byte     m_requestedDirection = STILL;
+	//byte     m_requestedDirection = STILL;
 	Color		m_color;
 	
 	GhostPlayer(GameModel gameModel, byte type, int startX, int startY, boolean bMiddle, Color color, int nExitMilliSec) {

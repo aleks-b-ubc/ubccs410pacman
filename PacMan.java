@@ -11,11 +11,13 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class PacMan extends Applet {
+	ServerNode serverNode;
 	String sqlDB = "greentea_scoretest";
 	String sqlTable = "HighScores";
 	Connection con;
 	Statement stmt;
 	ResultSet rs;
+	byte ghostDirection =-1;
 	int facebookID; // Facebook userID
 	GameModel m_gameModel;
 	TopCanvas m_topCanvas;
@@ -38,82 +40,18 @@ public class PacMan extends Applet {
 	boolean multiplayerActive = false;// Is active if the game is playing.
 
 	ServerSocket serverSocket; //this is for accepting connections
-	Socket tcpSocket; //this is for receiving updates from slaves
+	//Socket tcpSocket; //this is for receiving updates from slaves
 	MulticastSocket updateSocket; //this is for sending game updates
 	String group = "224.0.0.1"; // this is the group for broadcasting
 
-	int listenPort = 4444; // the port on which local machine is listening
+	static int listenPort = 45452; // the port on which local machine is listening
 	int updateSendPort = 5555; // the port on which local machine is sending updates
 	int updateListenPort = 6666; //the port on which machines listen for updates
+	private ClientNode clientNode;
 	
 	
-	public void init() {
+	public synchronized void init() {
 		setTicksPerSec(35);
-		try {
-			facebookID = Integer.parseInt(getParameter("uid"));
-
-			// Register the JDBC driver for MySQL.
-			Class.forName("com.mysql.jdbc.Driver");
-
-			// Define URL of database server for
-			// database named JunkDB on the localhost
-			// with the default port number 3306.
-			String url = "jdbc:mysql://localhost:3306/greentea_scoretest"; // TODO
-			// enter
-			// database
-			// name
-
-			// Get a connection to the database for a
-			// user named facebook with the password
-			// cs410.
-			con = DriverManager.getConnection(url, "greentea_pacman",
-					"wakawaka");
-
-			// Display URL and connection information
-			// TODO: remove this prints when testing is finished.
-			System.out.println("URL: " + url);
-			System.out.println("Connection: " + con);
-
-			// Get a Statement object
-			stmt = con.createStatement();
-
-			/*
-			 * //As a precaution, delete myTable if it // already exists as
-			 * residue from a // previous run. Otherwise, if the table //
-			 * already exists and an attempt is made // to create it, an
-			 * exception will be // thrown. try{
-			 * stmt.executeUpdate("DROP TABLE myTable"); }catch(Exception e){
-			 * System.out.print(e); System.out.println(
-			 * "No existing table to delete"); }//end catch
-			 */
-			/*
-			 * //Create a table in the database named // myTable.
-			 * stmt.executeUpdate( "CREATE TABLE myTable(test_id int," +
-			 * "test_val char(15) not null)");
-			 * 
-			 * //Insert some values into the table
-			 */
-			stmt.executeUpdate("INSERT INTO myTable(test_id, "
-					+ "test_val) VALUES(1,'One')");
-			stmt.executeUpdate("INSERT INTO myTable(test_id, "
-					+ "test_val) VALUES(2,'Two')");
-			stmt.executeUpdate("INSERT INTO myTable(test_id, "
-					+ "test_val) VALUES(3,'Three')");
-			stmt.executeUpdate("INSERT INTO myTable(test_id, "
-					+ "test_val) VALUES(4,'Four')");
-			stmt.executeUpdate("INSERT INTO myTable(test_id, "
-					+ "test_val) VALUES(5,'Five')");
-
-			/*
-			 * //Get another statement object initialized // as shown. stmt =
-			 * con.createStatement( ResultSet.TYPE_SCROLL_INSENSITIVE,
-			 * ResultSet.CONCUR_READ_ONLY);
-			 */
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}// end catch
-
 		// Create canvases and layout
 		m_gameModel = new GameModel(this);
 		m_highScoresModel = new HighScoresModel();
@@ -151,16 +89,16 @@ public class PacMan extends Applet {
 	}
 
 	// Master ticker that runs various parts of the game	// based on the GameModel's STATE
-	public void tick() {
+	public  void tick() {
 		// long temp = System.currentTimeMillis ();		m_globalTickCount++;
 
 		// TODO: REMOVE!
-		System.out.println("Current tick is: " + m_globalTickCount);
+		//System.out.println("Current tick is: " + m_globalTickCount);
 
 		// This method sends the current state to other nodes!
 		// but only if the game is multipalyer is running AND this is
 		// the controller.
-		if (multiplayerActive) {
+		/*if (multiplayerActive) {
 			if (controller) {
 				try {
 					sendModel(m_gameModel);
@@ -172,17 +110,19 @@ public class PacMan extends Applet {
 			} else {
 				updateSlaveModel();
 			}
-		}
+		}*/
 
 		switch (m_gameModel.m_state) {
 		case GameModel.STATE_HOSTING:
-			acceptConnection();
+			serverNode.connectToClients(2);
 			break;
 		case GameModel.STATE_CONNECT:
-			connectMultiplayerGame();
+			clientNode = new ClientNode(this);
+			clientNode.connectMultiplayerGame();
 			break;
 		case GameModel.STATE_SET_UP_CONNECTION:
-			setUpHosting();
+			serverNode= new ServerNode(this);
+			serverNode.setUpHosting();
 			break;
 		case GameModel.STATE_MULTIPLAYER_WAITROOM:
 			startMultiplayerScreen();
@@ -283,7 +223,7 @@ public class PacMan extends Applet {
 		}
 	}
 
-	private void setGhosts(PacmanDataPacket received) {
+	private  void setGhosts(PacmanDataPacket received) {
 		for(int i = 0; i < received.ghosts.length; i++){
 			
 			m_gameModel.m_ghosts[i].m_bCanBackTrack = received.ghosts[i].m_bCanBackTrack;
@@ -324,7 +264,7 @@ public class PacMan extends Applet {
 		}
 	}
 
-	private void setFruit(PacmanDataPacket received) {
+	private  void setFruit(PacmanDataPacket received) {
 		
 		   m_gameModel.m_fruit.m_destinationX = received.fruit.m_destinationX;
 		   m_gameModel.m_fruit.m_destinationY = received.fruit.m_destinationY;
@@ -353,73 +293,7 @@ public class PacMan extends Applet {
 		
 	}
 
-	private void connectMultiplayerGame() {
-		netMultiplayer = true;
-		controller = false;
-		playerIsGhost = true;
-		
-		try {
-			//initialize the socket over which slave receive updates
-			updateSocket = new MulticastSocket(updateListenPort);
-			updateSocket.joinGroup(InetAddress.getByName(group));
-			//initialize the socket over which slave send updates
-			//TODO: MAKE THIS CHANGABLE!!! 
-			tcpSocket = new Socket(InetAddress.getLocalHost(), listenPort);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		//once connections are opened, we start the game!
-		m_gameModel.m_state = GameModel.STATE_NEWGAME;
-		
-	}
-
-	private void acceptConnection() {
-		// we accept connection, and begind playing
-		try {
-			tcpSocket = serverSocket.accept();
-			multiplayerActive = true;
-
-			// start new game?
-			m_gameModel.m_state = GameModel.STATE_NEWGAME;
-
-			// here we need to accept connection and start playing!
-		} catch (IOException e) {
-			// If something goes wrong. We just bounce out of multiplayer
-			System.out.println("Shit. Can't accept connection.");
-			netMultiplayer = false;
-			controller = false;
-		}
-
-	}
-
-	private void setUpHosting() {
-		netMultiplayer = true;
-		controller = true;
-		playerIsGhost = false;
-
-		
-		try {
-			//create a new server socket for accepting connections from slaves
-			serverSocket = new ServerSocket(listenPort);
-			
-			//Also initialize the update socket for SENDING
-			updateSocket = new MulticastSocket(updateSendPort);
-
-			// Oh. Here we do necessary UI changes
-			// Then we accept the connection?
-			m_gameUI.m_bShowHostingGame = true;
-
-			m_gameUI.hostingIP = InetAddress.getLocalHost().getHostAddress();
-			m_gameUI.portNumber = Integer.toString(serverSocket.getLocalPort());
-			m_gameUI.m_bRedrawAll = true;
-
-			m_gameModel.m_state = GameModel.STATE_HOSTING;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
+	
 
 	// This sends the game state. Yes the ENTIRE game state!
 	private void sendModel(GameModel gameModel) throws IOException {
@@ -452,7 +326,7 @@ public class PacMan extends Applet {
 
 	}
 
-	private void selectColor() {
+	private synchronized void selectColor() {
 		// For goes to the color selection screen
 		m_soundMgr.stop();
 		m_gameModel.m_bIntroInited = false;
@@ -465,7 +339,7 @@ public class PacMan extends Applet {
 
 	}
 
-	private void deadPacman() {
+	private synchronized void deadPacman() {
 		m_soundMgr.stop();
 		if (m_gameModel.m_nLives == 0) {
 			m_gameModel.m_state = GameModel.STATE_GAMEOVER;
@@ -484,7 +358,7 @@ public class PacMan extends Applet {
 		tickLevelComplete();
 	}
 
-	private void gameOver() {
+	private synchronized void gameOver() {
 		if (m_gameModel.m_nTicks2GameOver == 0) {
 			try {
 
@@ -546,7 +420,7 @@ public class PacMan extends Applet {
 
 	}
 
-	private void startNewGame() {
+	private synchronized void startNewGame() {
 
 		m_soundMgr.stop();
 		m_gameModel.newGame();
@@ -579,7 +453,7 @@ public class PacMan extends Applet {
 
 	}
 
-	private void startMultiplayerScreen() {
+	private synchronized void startMultiplayerScreen() {
 
 		// This is going to show up the Multiplayer waiting area
 
@@ -594,7 +468,7 @@ public class PacMan extends Applet {
 	}
 
 	// Ticked when level has completed
-	public void tickLevelComplete() {
+	public synchronized void tickLevelComplete() {
 		if (m_gameModel.m_nTicks2LevelComp == 0) {
 			m_gameModel.setPausedGame(true);
 			m_gameUI.m_bRedrawAll = true;
@@ -627,7 +501,7 @@ public class PacMan extends Applet {
 	}
 
 	// Ticked when Pacman has died
-	public void tickDeadPlay() {
+	public synchronized void tickDeadPlay() {
 		// Get another statement object initialized
 		// as shown.
 
@@ -664,7 +538,7 @@ public class PacMan extends Applet {
 	}
 
 	// Ticked when the game is about to begin play
-	public void tickBeginPlay() {
+	public synchronized void tickBeginPlay() {
 		if (m_gameModel.m_nTicks2BeginPlay == 0) {
 			m_gameModel.setVisibleThings(false);
 			m_gameModel.setPausedGame(true);
@@ -703,7 +577,12 @@ public class PacMan extends Applet {
 	}
 
 	// Ticked when the game is playing normally
-	public void tickGamePlay() {
+	public synchronized void tickGamePlay() {
+		/*if (ghostDirection !=-1){
+			m_gameModel.m_ghostPlayer.m_requestedDirection = ghostDirection;
+		}*/
+		if (serverNode !=null)
+			serverNode.updateGhostPlayers();
 		boolean bFleeing = false;
 		int nCollisionCode;
 
@@ -768,7 +647,7 @@ public class PacMan extends Applet {
 	}
 
 	// Ticked when the game is running the intro
-	public void tickIntro() {
+	public synchronized void tickIntro() {
 		boolean bFleeing = false;
 		int nCollisionCode;
 
@@ -978,4 +857,75 @@ public class PacMan extends Applet {
  * public boolean handleEvent (Event e) { if (e.id ==Event.WINDOW_DESTROY) {
  * System.exit (0); } return super.handleEvent (e); } }
  */
+/*
+private  void connectMultiplayerGame() {
+	netMultiplayer = true;
+	controller = false;
+	playerIsGhost = true;
+	
+	try {
+		//initialize the socket over which slave receive updates
+		updateSocket = new MulticastSocket(updateListenPort);
+		updateSocket.joinGroup(InetAddress.getByName(group));
+		//initialize the socket over which slave send updates
+		//TODO: MAKE THIS CHANGABLE!!! 
+		//tcpSocket = new Socket(InetAddress.getLocalHost(), listenPort);
+		
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	//once connections are opened, we start the game!
+	m_gameModel.m_state = GameModel.STATE_NEWGAME;
+	ClientWorker cw;
+	cw = new ClientWorker(m_gameModel);
+    Thread t2 = new Thread(cw);
+    t2.start();	
+}
 
+private  void acceptConnection() {
+	//tcpSocket = serverSocket.accept();
+	ServerWorker sw;
+	  try{
+		  //serverSocket.accept();
+	    sw = new ServerWorker(serverSocket.accept(), this);
+	    Thread t = new Thread(sw);
+	    //t.setPriority(Thread.MIN_PRIORITY);
+	    t.start();
+	  } catch (IOException e) {
+	    System.out.println("Accept failed: 4444");
+	    //System.exit(-1);
+	  }
+	multiplayerActive = true;
+
+	// start new game?
+	m_gameModel.m_state = GameModel.STATE_NEWGAME;
+
+}
+
+private void setUpHosting() {
+	netMultiplayer = true;
+	controller = true;
+	playerIsGhost = false;
+
+	
+	try {
+		//create a new server socket for accepting connections from slaves
+		serverSocket = new ServerSocket(listenPort);
+		
+		//Also initialize the update socket for SENDING
+		updateSocket = new MulticastSocket(updateSendPort);
+
+		// Oh. Here we do necessary UI changes
+		// Then we accept the connection?
+		m_gameUI.m_bShowHostingGame = true;
+
+		m_gameUI.hostingIP = InetAddress.getLocalHost().getHostAddress();
+		m_gameUI.portNumber = Integer.toString(serverSocket.getLocalPort());
+		m_gameUI.m_bRedrawAll = true;
+
+		m_gameModel.m_state = GameModel.STATE_HOSTING;
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+
+}*/
