@@ -7,7 +7,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 // Bottom right canvas that is repainted infrequently.
-// It contains the number of lives, level and instructions
+// It contains the number of 
+//lives, level and instructions
 class BottomCanvas extends Canvas
 {
 	Font        m_font;
