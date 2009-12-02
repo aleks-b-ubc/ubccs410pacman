@@ -340,24 +340,31 @@ public class GameModel implements Serializable{
 		m_nTicks2Backoff = 20000 / m_pacMan.m_delay;
 
 	}
-
+	public GhostPlayer ghostAIToPlayer(Ghost ghost){
+		return new GhostPlayer(this, Thing.GHOST, ghost.m_startX, ghost.m_startY, ghost.m_bMiddle,
+				ghost.m_color, ghost.m_nExitMilliSec);
+	}
+	
+	public GhostAI ghostPlayerToAI(Ghost ghost){
+		return new GhostAI(this, Thing.GHOST, ghost.m_startX, ghost.m_startY, ghost.m_bMiddle,
+				ghost.m_color, ghost.m_nExitMilliSec);
+	}
+	
 	// Called to reinitialize the game state and start a new game
 	public void newGame() {
 
 		// If the game is going to be multiplayer, we set the ghost as human.
 		// Else it's an AI.
 		if (localMultiplayer) {
-			m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 13, 11, true,
-					Color.red, 0);
+			//m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 13, 11, true,
+					//Color.red, 0);
+			m_ghostPlayer = ghostAIToPlayer(m_ghosts[0]);
 			m_ghosts[0] = m_ghostPlayer;
 		}
 		else if (m_pacMan.netMultiplayer) {
-			m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 13, 11, true,
-					Color.red, 0);
-			m_ghosts[0] = m_ghostPlayer;
-			/*m_ghostPlayer = new GhostPlayer(this, Thing.GHOST, 12, 14, false, Color.pink,
-					2000);
-			m_ghosts[1] = m_ghostPlayer;*/
+			for (int i=0; i< m_pacMan.m_numOfClients; i++){
+				m_ghosts[i] = ghostAIToPlayer(m_ghosts[i]);
+			}
 		}
 		else{
 			m_ghosts[0] = new GhostAI(this, Thing.GHOST, 13, 11, true, Color.red, 0);

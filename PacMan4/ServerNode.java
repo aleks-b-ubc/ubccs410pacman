@@ -2,7 +2,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 
 public class ServerNode extends Node {
 
@@ -10,6 +12,8 @@ public class ServerNode extends Node {
 	private PacMan m_pacMan;
 	private GameUI m_gameUI;
 	private GameModel m_gameModel;
+	Node[] nodes;
+	Thread[] threads;
 
 	byte[] ghostNewDirection = new byte[4];
 	private int numOfClients = 0;
@@ -33,6 +37,8 @@ public class ServerNode extends Node {
 	
 	public void connectToClients(int numOfClients){
 			this.numOfClients = numOfClients;
+			nodes = new Node[numOfClients];
+			threads = new Thread[numOfClients];
 			ServerWorker[] clients = new ServerWorker[numOfClients];
 			for (int i=0; i<numOfClients; i++){
 			acceptConnection(clients[i], i);
@@ -43,8 +49,13 @@ public class ServerNode extends Node {
 		//tcpSocket = serverSocket.accept();
 		  try{
 			  //serverSocket.accept();
-		    sw = new ServerWorker(m_pacMan.serverSocket.accept(), this, ghostID);
+			  Socket clientSocket = m_pacMan.serverSocket.accept();
+			  String clientIP = clientSocket.getInetAddress().getHostAddress();
+			  nodes[ghostID] = new Node(clientIP);
+			  System.out.println(clientIP);
+		    sw = new ServerWorker(clientSocket, this, ghostID);
 		    Thread t = new Thread(sw);
+		    threads[ghostID] = t;
 		    //t.setPriority(Thread.MIN_PRIORITY);
 		    t.start();
 		  } catch (IOException e) {
@@ -75,7 +86,7 @@ public class ServerNode extends Node {
 			// Then we accept the connection?
 			m_gameUI.m_bShowHostingGame = true;
 
-			m_gameUI.hostingIP = InetAddress.getLocalHost().getHostAddress();
+			m_gameUI.hostingIP = ip;
 			m_gameUI.portNumber = Integer.toString(m_pacMan.serverSocket.getLocalPort());
 			m_gameUI.m_bRedrawAll = true;
 

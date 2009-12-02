@@ -44,24 +44,18 @@ public class PacMan extends Applet {
 	MulticastSocket updateSocket; //this is for sending game updates
 	String group = "224.0.0.17"; // this is the group for broadcasting
 
-	int serverlistenPort = 45452; // the port on which local machine is listening
+	static int serverlistenPort = 45452; // the port on which local machine is listening
 	int updateSendPort = 5555; // the port on which local machine is sending updates
 	int updateListenPort = 6666; //the port on which machines listen for updates
 	private ClientNode clientNode;
-	String appletIP;
+	 int m_numOfClients;
 	
 	public synchronized void init() {
-		/*try {
+		/*
 			this.appletIP =  new Socket(getDocumentBase().getHost(), 8080)
 			.getLocalAddress().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		setTicksPerSec(35);
+	*/
+		setTicksPerSec(25);
 		// Create canvases and layout
 		m_gameModel = new GameModel(this);
 		m_highScoresModel = new HighScoresModel();
@@ -124,7 +118,9 @@ public class PacMan extends Applet {
 
 		switch (m_gameModel.m_state) {
 		case GameModel.STATE_HOSTING:
-			serverNode.connectToClients(1);
+			m_numOfClients = Integer.parseInt(JOptionPane.showInputDialog
+					(null, "Enter number of clients : ", "", 1));
+			serverNode.connectToClients(m_numOfClients);
 			break;
 		case GameModel.STATE_CONNECT:
 			clientNode = new ClientNode(this);

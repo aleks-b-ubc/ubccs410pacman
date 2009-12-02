@@ -6,11 +6,17 @@ public class Node {
 long id;
 String ip;
 boolean coord=false;
-
+public Node(String ip){
+	//java.net.NetworkInterface.
+	this.ip = ip;
+	//System.out.println(ip);
+	this.id = Long.parseLong(removeChar(ip, '.'));
+	//System.out.println(id);
+}
 public Node(){
 		//java.net.NetworkInterface.
 		this.ip = getIP();
-		//System.out.println(ip);
+		System.out.println(ip);
 		this.id = Long.parseLong(removeChar(ip, '.'));
 		//System.out.println(id);
 }

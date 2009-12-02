@@ -5,10 +5,27 @@ import java.net.*;
 public class ClientWorker implements Runnable{
 	Socket tcpSocket;
 	GameModel m_gameModel;
+	PrintWriter out;
 
 	
-	public ClientWorker(GameModel m_gameModel){
-		this.m_gameModel = m_gameModel;
+	public ClientWorker(GameModel m_gameModel, String hostIP){
+			try {
+				this.m_gameModel = m_gameModel;
+				tcpSocket = new Socket(hostIP, PacMan.serverlistenPort);
+				
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 	}
 	
 	
@@ -18,7 +35,10 @@ public class ClientWorker implements Runnable{
 			byte lastDirection = -1;
 			byte newDirection;
 		
-		   PrintWriter out = new PrintWriter(tcpSocket.getOutputStream(), true);
+			tcpSocket.setKeepAlive(true);
+			tcpSocket.setSoTimeout(3000);
+			
+		   out = new PrintWriter(tcpSocket.getOutputStream(), true);
 		   while (true)
 		   {
 			   Thread.sleep(1000/35);
@@ -36,4 +56,16 @@ public class ClientWorker implements Runnable{
 	      }
 	
 	}
+	protected void finalize(){
+		//Objects created in run method are finalized when 
+		//program terminates and thread exits
+		     try{
+		    	 out.close();
+		    	 tcpSocket.close();
+		    } catch (IOException e) {
+		        System.out.println("Could not close socket");
+		        System.exit(-1);
+		    }
+		  }
+
 }

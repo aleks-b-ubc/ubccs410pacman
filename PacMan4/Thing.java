@@ -37,9 +37,11 @@ public class Thing implements Serializable
    Rectangle   m_boundingBox; // Bounding box of Thing in pixels
    boolean     m_bPaused = false;
    boolean     m_bVisible = false;
+   boolean 	   m_bMiddle;
     
    Thing (GameModel gameModel, byte type, int startX, int startY, boolean bMiddleX)
    {
+	  this.m_bMiddle = bMiddleX;
       m_startX = startX;
       m_startY = startY;
       m_deltaStartX = 0;

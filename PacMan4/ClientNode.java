@@ -42,14 +42,8 @@ public class ClientNode extends Node{
 		ClientWorker cw;
 		  String hostIP = JOptionPane.showInputDialog(null, "Enter host's ip : ", 
 				  "", 1);
-		cw = new ClientWorker(m_gameModel);
-		try {
-			cw.tcpSocket = new Socket(hostIP, m_pacMan.serverlistenPort);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		cw = new ClientWorker(m_gameModel ,hostIP);
+
 	    Thread t2 = new Thread(cw);
 	    t2.start();	
 	}

@@ -8,6 +8,7 @@ class ServerWorker implements Runnable {
 
   
   ServerWorker(Socket client, ServerNode serverNode, int ghostID) {
+	  //System.out.println(client.getInetAddress().getHostAddress());
    this.client = client;
    this.serverNode = serverNode;
    this.ghostID = ghostID;
@@ -23,15 +24,20 @@ class ServerWorker implements Runnable {
       System.exit(-1);
     }
 
-    while(true){    	
+    while(true){  
       try{
-    	  Thread.sleep(1000/35);
+    	  //client.setKeepAlive(true);
+			client.setSoTimeout(1000);
     	  if (in.ready()){
     		  b = (byte)in.read();
     		  System.out.println("RECEIVING: " + b);
-    		  serverNode.ghostNewDirection[ghostID]=b;        	
+    		  serverNode.ghostNewDirection[ghostID]=b;   
+    		  Thread.sleep(1000/35);
     	  }
-
+    	  
+      	} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("TCP: client is not alive");
       	} catch (IOException e) {
       		System.out.println("Read failed");
       		System.exit(-1);
