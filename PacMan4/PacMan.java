@@ -197,6 +197,14 @@ public class PacMan extends Applet {
 	        m_gameModel.m_gameSizeY = received.gameSizeY;
 	        m_gameModel.m_stage = received.stage; 
 	        m_gameModel.m_pausedState = received.pausedState;
+	        
+	        
+	        
+	        Player temp = (Player) m_gameModel.m_things[0];
+			temp.m_degreeRotation = received.degreeRotation;
+			temp.m_score = received.score;
+			temp.m_mouthDegree = received.mouthDegree;
+			m_gameModel.m_things[0] = temp;
 			
 	        setFruit(received);
 	        setGhosts(received);

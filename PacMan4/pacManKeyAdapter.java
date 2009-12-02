@@ -20,6 +20,7 @@ class pacManKeyAdapter extends KeyAdapter {
 		//if the player is a ghost
 		case KeyEvent.VK_LEFT:
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.LEFT;
+
 			break;
 
 		case KeyEvent.VK_RIGHT:
@@ -32,6 +33,7 @@ class pacManKeyAdapter extends KeyAdapter {
 
 		case KeyEvent.VK_DOWN:
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.DOWN;
+			
 			break;
 		
 			//KEYS W,A,S,D are used for same machine multiplayer.

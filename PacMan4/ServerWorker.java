@@ -5,6 +5,16 @@ class ServerWorker implements Runnable {
   private Socket client;
   ServerNode serverNode;
   private int ghostID;
+  
+  private int numFail = 0;
+  private boolean failed = false;
+  
+  BufferedReader in = null;
+  BufferedWriter out = null;
+  
+  int test = 11;
+  int responce;
+  static int FAILLIMIT = 35;
 
   
   ServerWorker(Socket client, ServerNode serverNode, int ghostID) {
@@ -16,9 +26,11 @@ class ServerWorker implements Runnable {
 
   public void run(){
     byte b;
-    BufferedReader in = null;
+    
     try{
       in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+      out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+      
     } catch (IOException e) {
       System.out.println("in or out failed");
       System.exit(-1);
@@ -28,6 +40,8 @@ class ServerWorker implements Runnable {
       try{
     	  //client.setKeepAlive(true);
 			client.setSoTimeout(1000);
+    	  
+    	 
     	  if (in.ready()){
     		  b = (byte)in.read();
     		  System.out.println("RECEIVING: " + b);
@@ -42,10 +56,11 @@ class ServerWorker implements Runnable {
       		System.out.println("Read failed");
       		System.exit(-1);
       	} catch (InterruptedException e) {
-      		// TODO Auto-generated catch block
       		e.printStackTrace();
       	} 
     
     }
   }
+	
+	
 }

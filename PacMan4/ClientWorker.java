@@ -27,9 +27,7 @@ public class ClientWorker implements Runnable{
 			
 			
 	}
-	
-	
-	
+
 	public void run() {
 		try{
 			byte lastDirection = -1;

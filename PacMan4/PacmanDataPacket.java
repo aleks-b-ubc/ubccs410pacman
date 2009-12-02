@@ -43,7 +43,6 @@ public class PacmanDataPacket implements Serializable{
 		degreeRotation = temp.m_degreeRotation;
 		score = temp.m_score;
 		mouthDegree = temp.m_mouthDegree;
-		requestedDirection = temp.m_requestedDirection;
 		
 		setGhosts(model);
 		setThings(model);
