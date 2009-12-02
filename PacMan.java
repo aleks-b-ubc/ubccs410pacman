@@ -49,6 +49,7 @@ public class PacMan extends Applet {
 	int updateListenPort = 6666; //the port on which machines listen for updates
 	ClientNode clientNode;
 	ServerNode serverNode;
+	int NUMBER_PLAYERS = 1;
 	
 	
 	public synchronized void init() {
@@ -84,6 +85,7 @@ public class PacMan extends Applet {
 		addKeyListener(new pacManKeyAdapter(this));
 
 		validate();
+		
 		m_soundMgr = new SoundManager(this, getCodeBase());
 		m_soundMgr.loadSoundClips();
 
@@ -115,7 +117,7 @@ public class PacMan extends Applet {
 
 		switch (m_gameModel.m_state) {
 		case GameModel.STATE_HOSTING:
-			serverNode.connectToClients(2);
+			serverNode.connectToClients(NUMBER_PLAYERS);
 			break;
 		case GameModel.STATE_CONNECT:
 			clientNode = new ClientNode(this);
@@ -175,6 +177,7 @@ public class PacMan extends Applet {
 	
 	private void updateSlaveModel(){
 		
+		
 		byte[] buffer = new byte[65536];
         PacmanDataPacket received;
         
@@ -192,6 +195,11 @@ public class PacMan extends Applet {
 	        m_gameModel.m_gameSizeY = received.gameSizeY;
 	        m_gameModel.m_stage = received.stage; 
 	        m_gameModel.m_pausedState = received.pausedState;
+	        
+	        Player temp = (Player) m_gameModel.m_things[0];
+	        temp.m_score = received.score;
+	        temp.m_degreeRotation = received.degreeRotation;
+	        m_gameModel.m_things[0] = temp;
 			
 	        setFruit(received);
 	        setGhosts(received);
@@ -837,18 +845,20 @@ public class PacMan extends Applet {
 		}
 	}
 
-	/*
-	 * Can't run Pacman as an application since it use sound-related methods.
-	 * public static void main (String args[]) { // Create new window MainFrame
-	 * frame = new MainFrame ("PacMan");
-	 * 
-	 * // Create PacMan instance PacMan pacMan = new PacMan ();
-	 * 
-	 * // Initialize instance pacMan.init ();
-	 * 
-	 * frame.add ("Center", pacMan); frame.pack (); frame.show ();
-	 * 
-	 * pacMan.start (); }
+	/**
+	 // Can't run Pacman as an application since it use sound-related methods.
+	  public static void main (String args[]) { // Create new window MainFrame
+	  Frame frame = new Frame ("PacMan");
+	  
+	  // Create PacMan instance 
+	  PacMan pacMan = new PacMan ();
+	  
+	  // Initialize instance 
+	  pacMan.init ();
+	  
+	  frame.add ("Center", pacMan); frame.pack (); frame.show ();
+	  
+	  pacMan.start (); }
 	 */
 }
 

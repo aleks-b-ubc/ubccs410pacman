@@ -24,19 +24,17 @@ public class ClientNode extends Node{
 		m_pacMan.controller = false;
 		m_pacMan.playerIsGhost = true;
 		
-		/*try {
+		try {
 			//initialize the socket over which slave receive updates
-		//	updateSocket = new MulticastSocket(updateListenPort);
-		//	updateSocket.joinGroup(InetAddress.getByName(group));
+			m_pacMan.updateSocket = new MulticastSocket(m_pacMan.updateListenPort);
+			m_pacMan.updateSocket.joinGroup(InetAddress.getByName(m_pacMan.group));
 			//initialize the socket over which slave send updates
-			//TODO: MAKE THIS CHANGABLE!!! 
-			//tcpSocket = new Socket(InetAddress.getLocalHost(), listenPort);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 		//once connections are opened, we start the game!
-		//m_gameModel.m_state = GameModel.STATE_NEWGAME;
+		m_gameModel.m_state = GameModel.STATE_NEWGAME;
 		
 		Component frame = null;
 		String ipToConnect = JOptionPane.showInputDialog(frame,
@@ -54,7 +52,11 @@ public class ClientNode extends Node{
 		}
 		
 	    Thread t2 = new Thread(cw);
-	    t2.start();	
+	    t2.start();
+	    //Must not forget to set multipalyer as active so the game fetches
+	    //game state updates
+	    m_pacMan.multiplayerActive = true;
+
 	}
 	
 	

@@ -30,8 +30,8 @@ public class ServerNode extends Node{
 		}
 	}
 	
-	public void connectToClients(int numOfClients){
-			this.numOfClients = numOfClients;
+	public void connectToClients(int num){
+			numOfClients = num;
 			ServerWorker[] clients = new ServerWorker[numOfClients];
 			for (int i=0; i<numOfClients; i++){
 			acceptConnection(clients[i], i);
@@ -39,7 +39,6 @@ public class ServerNode extends Node{
 	}
 
 	private  void acceptConnection(ServerWorker sw, int ghostID) {
-		//tcpSocket = serverSocket.accept();
 		  try{
 			  //serverSocket.accept();
 		    sw = new ServerWorker(m_pacMan.serverSocket.accept(), this, ghostID);

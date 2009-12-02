@@ -19,19 +19,27 @@ class pacManKeyAdapter extends KeyAdapter {
 		//Arrow keys are used for Pacman singleplayer AND for network multiplayer
 		//if the player is a ghost
 		case KeyEvent.VK_LEFT:
-			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.LEFT;
+			if(!m_pacMan.multiplayerActive || m_pacMan.controller){
+				m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.LEFT;
+			}
 			break;
 
 		case KeyEvent.VK_RIGHT:
+			if(!m_pacMan.multiplayerActive || m_pacMan.controller){
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.RIGHT;
+			}
 			break;
 
 		case KeyEvent.VK_UP:
+			if(!m_pacMan.multiplayerActive || m_pacMan.controller){
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.UP;
+			}
 			break;
 
 		case KeyEvent.VK_DOWN:
+			if(!m_pacMan.multiplayerActive || m_pacMan.controller){
 			m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.DOWN;
+			}
 			break;
 		
 			//KEYS W,A,S,D are used for same machine multiplayer.

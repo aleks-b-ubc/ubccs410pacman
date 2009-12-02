@@ -7,10 +7,10 @@ class ServerWorker implements Runnable {
   private int ghostID;
 
   
-  ServerWorker(Socket client, ServerNode serverNode, int ghostID) {
-   this.client = client;
-   this.serverNode = serverNode;
-   this.ghostID = ghostID;
+  ServerWorker(Socket clientSocket, ServerNode Node, int ID) {
+   client = clientSocket;
+   serverNode = Node;
+   ghostID = ID;
   }
 
   public void run(){
@@ -28,15 +28,14 @@ class ServerWorker implements Runnable {
     	  Thread.sleep(1000/35);
     	  if (in.ready()){
     		  b = (byte)in.read();
-    		  System.out.println("RECEIVING: " + b);
-    		  serverNode.ghostNewDirection[ghostID]=b;        	
+    		  System.out.println("Ghost ID: " + ghostID + ", direction: " + b);
+    		  serverNode.ghostNewDirection[ghostID] = b;        	
     	  }
 
       	} catch (IOException e) {
       		System.out.println("Read failed");
       		System.exit(-1);
       	} catch (InterruptedException e) {
-      		// TODO Auto-generated catch block
       		e.printStackTrace();
       	} 
     

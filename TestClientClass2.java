@@ -124,10 +124,3 @@ public class TestClientClass2 {
      }
 
 }
-
-class testPacket implements Serializable{
-	int[] test;
-	testPacket(){
-		
-	}
-}
