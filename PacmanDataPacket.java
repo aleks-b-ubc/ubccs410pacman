@@ -20,6 +20,8 @@ public class PacmanDataPacket implements Serializable{
 	//a few of the most necessary pacman variables
 	int      degreeRotation;      // Used to track Pacman's degree rotation
 	int      score;
+	int      mouthDegree;
+	byte 	 requestedDirection;
 	
 	transportThing[] things; // Contains references to Pacman and Ghosts
 	transportGhost[] ghosts;
@@ -42,7 +44,10 @@ public class PacmanDataPacket implements Serializable{
 		//the the pacman
 		Player temp = (Player) model.m_things[0];
 		degreeRotation = temp.m_degreeRotation;
-		score = temp.m_score;		
+		score = temp.m_score;
+		mouthDegree = temp.m_mouthDegree;
+		requestedDirection = temp.m_requestedDirection;
+		
 		
 		setGhosts(model);
 		setThings(model);
@@ -91,7 +96,9 @@ public class PacmanDataPacket implements Serializable{
 			things[i].m_deltaLocX = model.m_things[i].m_deltaLocX;
 			things[i].m_deltaLocY = model.m_things[i].m_deltaLocY;
 			things[i].m_deltaStartX = model.m_things[i].m_deltaStartX;
-			things[i].m_direction = model.m_things[i].m_direction;
+			if( i != 2){
+				things[i].m_direction = model.m_things[i].m_direction;
+			}
 			things[i].m_lastDeltaLocX = model.m_things[i].m_lastDeltaLocX;
 			things[i].m_lastDeltaLocY = model.m_things[i].m_lastDeltaLocY;
 			things[i].m_lastLocX = model.m_things[i].m_locX;
@@ -134,7 +141,9 @@ public class PacmanDataPacket implements Serializable{
 				ghosts[i].m_deltaLocX = model.m_ghosts[i].m_deltaLocX;
 				ghosts[i].m_deltaLocY = model.m_ghosts[i].m_deltaLocY;
 				ghosts[i].m_deltaStartX = model.m_ghosts[i].m_deltaStartX;
-				ghosts[i].m_direction = model.m_ghosts[i].m_direction;
+				if(i != 0){
+					ghosts[i].m_direction = model.m_ghosts[i].m_direction;
+				}
 				ghosts[i].m_lastDeltaLocX = model.m_ghosts[i].m_lastDeltaLocX;
 				ghosts[i].m_lastDeltaLocY = model.m_ghosts[i].m_lastDeltaLocY;
 				ghosts[i].m_lastLocX = model.m_ghosts[i].m_locX;

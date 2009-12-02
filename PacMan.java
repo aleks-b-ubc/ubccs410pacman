@@ -42,7 +42,7 @@ public class PacMan extends Applet {
 	ServerSocket serverSocket; //this is for accepting connections
 	//Socket tcpSocket; //this is for receiving updates from slaves
 	MulticastSocket updateSocket; //this is for sending game updates
-	String group = "224.0.0.1"; // this is the group for broadcasting
+	String group = "224.0.0.17"; // this is the group for broadcasting
 
 	int serverListenPort = 45452; // the port on which local machine is listening
 	int updateSendPort = 5555; // the port on which local machine is sending updates
@@ -199,6 +199,8 @@ public class PacMan extends Applet {
 	        Player temp = (Player) m_gameModel.m_things[0];
 	        temp.m_score = received.score;
 	        temp.m_degreeRotation = received.degreeRotation;
+	        temp.m_mouthDegree = received.mouthDegree;
+	        temp.m_requestedDirection = received.requestedDirection;
 	        m_gameModel.m_things[0] = temp;
 			
 	        setFruit(received);

@@ -29,7 +29,8 @@ class ServerWorker implements Runnable {
     	  if (in.ready()){
     		  b = (byte)in.read();
     		  System.out.println("Ghost ID: " + ghostID + ", direction: " + b);
-    		  serverNode.ghostNewDirection[ghostID] = b;        	
+    		  //TODO: FIX ME!
+    		  serverNode.ghostNewDirection[ghostID] = b; 
     	  }
 
       	} catch (IOException e) {

@@ -17,7 +17,6 @@ class pacManKeyAdapter extends KeyAdapter {
 		switch (event.getKeyCode()) {
 		
 		//Arrow keys are used for Pacman singleplayer AND for network multiplayer
-		//if the player is a ghost
 		case KeyEvent.VK_LEFT:
 			if(!m_pacMan.multiplayerActive || m_pacMan.controller){
 				m_pacMan.m_gameModel.m_player.m_requestedDirection = Thing.LEFT;
