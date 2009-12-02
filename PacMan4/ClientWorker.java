@@ -5,11 +5,10 @@ import java.net.*;
 public class ClientWorker implements Runnable{
 	Socket tcpSocket;
 	GameModel m_gameModel;
-	String hostIP;
+
 	
-	public ClientWorker(GameModel m_gameModel, String hostIP){
+	public ClientWorker(GameModel m_gameModel){
 		this.m_gameModel = m_gameModel;
-		this.hostIP = hostIP;
 	}
 	
 	

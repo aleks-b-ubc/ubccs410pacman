@@ -5,25 +5,24 @@ import java.net.ServerSocket;
 import java.net.SocketAddress;
 
 public class ServerNode extends Node {
-	public static int LISTENPORT = 4444;
+
 	
 	private PacMan m_pacMan;
 	private GameUI m_gameUI;
 	private GameModel m_gameModel;
-	private ServerSocket serverSocket;
-	private MulticastSocket updateSocket;
-	private SocketAddress updateSendPort;
+
 	byte[] ghostNewDirection = new byte[4];
 	private int numOfClients = 0;
 	
-	public ServerNode (PacMan m_pacMan){
+	public ServerNode (PacMan pacMan){
 		super(); // init node
 		//reference to all game models
 		//m_pacManthis.ip = m_pacMan.appletIP;
-		this.m_pacMan = m_pacMan;
-		this.m_gameUI = m_pacMan.m_gameUI;
-		this.m_gameModel = m_pacMan.m_gameModel;
-		this.coord = true; //set this node as a coordinator
+		m_pacMan = pacMan;
+		m_gameUI = pacMan.m_gameUI;
+		m_gameModel = pacMan.m_gameModel;
+		m_pacMan.controller = true;
+		coord = true; //set this node as a coordinator
 	}
 	
 	public void updateGhostPlayers (){

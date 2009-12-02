@@ -16,6 +16,12 @@ public class PacmanDataPacket implements Serializable{
 	int stage; // Same as level of difficulty
 	int state;
 	int pausedState; // Save FSM state when game is paused
+	
+	int degreeRotation;
+	int score;
+	int mouthDegree;
+	byte requestedDirection;
+	
 	transportThing[] things; // Contains references to Pacman and Ghosts
 	transportGhost[] ghosts;
 	transportFruit fruit;
@@ -32,6 +38,12 @@ public class PacmanDataPacket implements Serializable{
 		gameSizeY = model.m_gameSizeY;
 		stage = model.m_stage; 
 		pausedState = model.m_pausedState;
+		
+		Player temp = (Player) model.m_things[0];
+		degreeRotation = temp.m_degreeRotation;
+		score = temp.m_score;
+		mouthDegree = temp.m_mouthDegree;
+		requestedDirection = temp.m_requestedDirection;
 		
 		setGhosts(model);
 		setThings(model);
