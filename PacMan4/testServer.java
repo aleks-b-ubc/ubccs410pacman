@@ -9,8 +9,6 @@ import java.util.Scanner;
 
 public class testServer {
 
-
-
 	int numFail = 0;
 	boolean failed = false;
 	boolean gotAns = false;
@@ -49,14 +47,37 @@ public class testServer {
 
 	}
 
-	public void testConnection() throws IOException {
+	public void testConnection() {
 		failed = false;
 		numFail = 0;
-		while(true){
-			System.out.println("sending");
-			out.write(test);
+		gotAns = false;
+				
+		while(!gotAns && (numFail < FAILLIMIT)){		
+			try {
+				responce = 0;
+				System.out.println("sending");
+				out.write(test);
+				out.flush();
+				
+				responce = in.read();
+			} catch (IOException e) {
+				System.out.println("Error on send/read");
+				numFail++;		
+			}
+			if(responce == test){
+				failed = false;
+				numFail = 0;
+				gotAns = true;
+			}
+			else{			
+				numFail++;
+				if(numFail >= FAILLIMIT){
+					failed = true;
+				}
+			}		
 		}
-
+		
+		
 	}
 
 	public static void main(String[] args) throws IOException {

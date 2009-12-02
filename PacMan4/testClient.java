@@ -28,18 +28,17 @@ public class testClient {
 			e.printStackTrace();
 		}
 
+		int test;
 		while(true){
 			try {
-				System.out.println("reading");
-				int test = in.read();
-				System.out.println(test);
-				
+				test = in.read();
+				out.write(test);
+				out.flush();
+				System.out.println("Echoed");
 			} catch (IOException e) {
-				System.out.println("error");
+				System.out.println("FUcked.");
 			}
-	
-		}
-		
+		}		
 	}
 
 	/**

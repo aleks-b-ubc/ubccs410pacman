@@ -6,12 +6,17 @@ public class ClientWorker implements Runnable{
 	Socket tcpSocket;
 	GameModel m_gameModel;
 	PrintWriter out;
+	BufferedReader in;
+	
+	boolean serverFailed;
 
 	
 	public ClientWorker(GameModel m_gameModel, String hostIP){
 			try {
 				this.m_gameModel = m_gameModel;
 				tcpSocket = new Socket(hostIP, PacMan.serverlistenPort);
+				in = new BufferedReader(new InputStreamReader(tcpSocket
+						.getInputStream()));
 				
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block
@@ -33,8 +38,8 @@ public class ClientWorker implements Runnable{
 			byte lastDirection = -1;
 			byte newDirection;
 		
-			tcpSocket.setKeepAlive(true);
-			tcpSocket.setSoTimeout(3000);
+			//tcpSocket.setKeepAlive(true);
+			//tcpSocket.setSoTimeout(3000);
 			
 		   out = new PrintWriter(tcpSocket.getOutputStream(), true);
 		   while (true)
@@ -47,6 +52,17 @@ public class ClientWorker implements Runnable{
 				    out.write(newDirection);
 				    out.flush();  
 			   }
+			   //this checks if we get something in the TCP socket.
+			   //if we do, we echo it immideatly. If we get an exception, that
+			   //means the server has dropped out.
+			   int test;
+			   try {
+					test = in.read();
+					out.write(test);
+					out.flush();
+				} catch (IOException e) {
+					serverFailed = true;
+				}
 		   }
 	 
 		}catch(Exception e) {
