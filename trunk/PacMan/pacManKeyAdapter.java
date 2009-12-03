@@ -124,6 +124,8 @@ class pacManKeyAdapter extends KeyAdapter {
 			}
 			break;
 			
+			//TODO REMOVE COMMENT:
+			/**
 		// V is for SOUND
 		case KeyEvent.VK_V:
 			m_pacMan.m_soundMgr.m_bEnabled = !m_pacMan.m_soundMgr.m_bEnabled;
@@ -135,6 +137,7 @@ class pacManKeyAdapter extends KeyAdapter {
 		case KeyEvent.VK_I:
 			m_pacMan.toggleGhostAI();
 			break;
+			*/
 			
 			
 		//1 Sets the color to white

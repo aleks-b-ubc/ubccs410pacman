@@ -50,6 +50,23 @@ public class PacMan extends Applet {
 	private ClientNode clientNode;
 	 int m_numOfClients;
 	
+	 /**
+	 @SuppressWarnings("deprecation")
+	public static void main(String[] args) {
+			PacMan pacMan = new PacMan();
+			pacMan.init();
+			pacMan.start();
+			JFrame window = new JFrame("Sample Applet and Application");
+	        window.setContentPane(pacMan);
+	        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        window.pack();              // Arrange the components.
+	        //System.out.println(theApplet.getSize());
+	        window.setVisible(true);    // Make the window visible.
+
+			//pacMan.setVisible(true);
+		}
+	 */
+	 
 	public synchronized void init() {
 		/*
 			this.appletIP =  new Socket(getDocumentBase().getHost(), 8080)
@@ -87,8 +104,10 @@ public class PacMan extends Applet {
 		addKeyListener(new pacManKeyAdapter(this));
 
 		validate();
-		m_soundMgr = new SoundManager(this, getCodeBase());
-		m_soundMgr.loadSoundClips();
+		
+		//TODO: REMOVE COMMENT
+		//m_soundMgr = new SoundManager(this, getCodeBase());
+		//m_soundMgr.loadSoundClips();
 
 	}
 
@@ -96,8 +115,6 @@ public class PacMan extends Applet {
 	public  void tick() {
 		// long temp = System.currentTimeMillis ();		m_globalTickCount++;
 
-		// TODO: REMOVE!
-		//System.out.println("Current tick is: " + m_globalTickCount);
 
 		// This method sends the current state to other nodes!
 		// but only if the game is multipalyer is running AND this is
@@ -106,8 +123,6 @@ public class PacMan extends Applet {
 			if (controller) {
 				try {
 					sendModel(m_gameModel);
-					//TODO: get updates from slave nodes
-					//updateController
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -197,6 +212,7 @@ public class PacMan extends Applet {
 	        m_gameModel.m_gameSizeY = received.gameSizeY;
 	        m_gameModel.m_stage = received.stage; 
 	        m_gameModel.m_pausedState = received.pausedState;
+	        m_gameModel.m_nLives = received.nLives;
 	        
 	        
 	        
@@ -208,7 +224,7 @@ public class PacMan extends Applet {
 			
 	        setFruit(received);
 	        setGhosts(received);
-	        setThings(received);
+	        setThings(received);    
 	        
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -329,7 +345,9 @@ public class PacMan extends Applet {
 	}
 
 	private void showHighScore() {
-		m_soundMgr.stop();
+		
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.stop();
 		m_gameModel.m_bIntroInited = false;
 		m_gameUI.m_bShowIntro = false;
 		m_gameUI.m_bShowColor = false;
@@ -342,7 +360,9 @@ public class PacMan extends Applet {
 
 	private synchronized void selectColor() {
 		// For goes to the color selection screen
-		m_soundMgr.stop();
+		
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.stop();
 		m_gameModel.m_bIntroInited = false;
 		m_gameUI.m_bShowIntro = false;
 		m_gameUI.m_bShowHighScore = false;
@@ -354,7 +374,9 @@ public class PacMan extends Applet {
 	}
 
 	private synchronized void deadPacman() {
-		m_soundMgr.stop();
+		
+		//TODO REMOVE COMMENT
+		//m_soundMgr.stop();
 		if (m_gameModel.m_nLives == 0) {
 			m_gameModel.m_state = GameModel.STATE_GAMEOVER;
 			m_gameModel.m_nTicks2GameOver = 0;
@@ -368,7 +390,8 @@ public class PacMan extends Applet {
 	}
 
 	private void levelComplete() {
-		m_soundMgr.stop();
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.stop();
 		tickLevelComplete();
 	}
 
@@ -436,7 +459,8 @@ public class PacMan extends Applet {
 
 	private synchronized void startNewGame() {
 
-		m_soundMgr.stop();
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.stop();
 		m_gameModel.newGame();
 		m_gameModel.m_state = GameModel.STATE_BEGIN_PLAY;
 		m_gameModel.m_nTicks2BeginPlay = 0;
@@ -471,7 +495,8 @@ public class PacMan extends Applet {
 
 		// This is going to show up the Multiplayer waiting area
 
-		m_soundMgr.stop();
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.stop();
 		m_gameModel.m_bIntroInited = false;
 		m_gameUI.m_bShowIntro = false;
 		m_gameUI.m_bShowHighScore = false;
@@ -527,7 +552,9 @@ public class PacMan extends Applet {
 			m_gameUI.m_bRedrawAll = true;
 			m_gameModel.m_nOrigTicksPerSecond = m_ticksPerSec;
 			setTicksPerSec(35);
-			m_soundMgr.stop();
+			
+			//TODO: REMOVE COMMENT
+			//m_soundMgr.stop();
 		}
 
 		m_gameModel.m_nTicks2DeadPlay++;
@@ -539,7 +566,9 @@ public class PacMan extends Applet {
 			}
 			m_gameModel.m_fruit.setVisible(false);
 			m_gameUI.m_bRedrawAll = true;
-			m_soundMgr.playSound(SoundManager.SOUND_PACMANDIES);
+			
+			//TODO REMOVE COMMENT
+			//m_soundMgr.playSound(SoundManager.SOUND_PACMANDIES);
 		}
 
 		if (m_gameModel.m_nTicks2DeadPlay == (SoundManager.SOUND_PACMANDIES_LENGTH + 1000)
@@ -562,7 +591,8 @@ public class PacMan extends Applet {
 			m_gameUI.m_bFlipWallColor = false;
 			m_gameUI.refreshRedrawHash();
 			if (m_gameModel.m_bPlayStartClip) {
-				m_soundMgr.playSound(SoundManager.SOUND_START);
+				////TODO: REMOVE COMMENT
+				//m_soundMgr.playSound(SoundManager.SOUND_START);
 				m_gameModel.m_bPlayStartClip = false;
 			}
 			m_bottomCanvas.repaint();
@@ -575,9 +605,10 @@ public class PacMan extends Applet {
 			m_gameModel.m_fruit.setVisible(false);
 		}
 
+		//TODO: REMOVE COMMENT
 		if ((m_gameModel.m_nTicks2BeginPlay == SoundManager.SOUND_START_LENGTH
 				/ m_delay && !m_gameModel.m_bStartClipPlayed)
-				|| (m_gameModel.m_nTicks2BeginPlay == 1000 / m_delay && m_gameModel.m_bStartClipPlayed)) {
+				||(m_gameModel.m_nTicks2BeginPlay == 1000 / m_delay && m_gameModel.m_bStartClipPlayed)) {
 			m_gameModel.m_state = GameModel.STATE_PLAYING;
 			m_gameModel.setVisibleThings(true);
 			m_gameModel.m_fruit.setVisible(false);
@@ -586,7 +617,9 @@ public class PacMan extends Applet {
 			m_gameUI.m_bRedrawAll = true;
 			m_gameModel.m_nTicks2BeginPlay = 0;
 			m_gameModel.m_bStartClipPlayed = true;
-			m_soundMgr.playSound(SoundManager.SOUND_SIREN);
+			
+			//TODO: REMOVE COMMENT
+			//m_soundMgr.playSound(SoundManager.SOUND_SIREN);
 		}
 	}
 
@@ -602,7 +635,9 @@ public class PacMan extends Applet {
 
 		// Check if player has earned free life
 		if (m_gameModel.m_player.m_score >= m_gameModel.m_nextFreeUp) {
-			m_soundMgr.playSound(SoundManager.SOUND_EXTRAPAC);
+			
+			//TODO: REMOVE COMMENT
+			//m_soundMgr.playSound(SoundManager.SOUND_EXTRAPAC);
 			m_gameModel.m_nLives += 1;
 			m_gameModel.m_nextFreeUp += 10000;
 			m_bottomCanvas.repaint();
@@ -615,7 +650,8 @@ public class PacMan extends Applet {
 
 			if (nCollisionCode == 1) // Ghost was eaten
 			{
-				m_soundMgr.playSound(SoundManager.SOUND_EATGHOST);
+				//TODO: REMOVE COMMENT
+				//m_soundMgr.playSound(SoundManager.SOUND_EATGHOST);
 				break; // Must be eaten one tick at a time
 			} else if (nCollisionCode == 2) // Pacman was caught.
 			{
@@ -625,7 +661,8 @@ public class PacMan extends Applet {
 				return;
 			} else if (nCollisionCode == 3) // Pacman ate a Fruit
 			{
-				m_soundMgr.playSound(SoundManager.SOUND_EATFRUIT);
+				//TODO: REMOVE COMMENT
+				//m_soundMgr.playSound(SoundManager.SOUND_EATFRUIT);
 				break; // Must be eaten one tick at a time
 			}
 		}
@@ -647,8 +684,10 @@ public class PacMan extends Applet {
 		// and kill the BlueGhost loop
 		if (bFleeing != true) {
 			m_gameModel.m_eatGhostPoints = 200;
-			m_soundMgr.stopSound(SoundManager.SOUND_GHOSTBLUE);
-			m_soundMgr.playSound(SoundManager.SOUND_SIREN);
+			
+			//TODO: REMOVE COMMENT
+			//m_soundMgr.stopSound(SoundManager.SOUND_GHOSTBLUE);
+			//m_soundMgr.playSound(SoundManager.SOUND_SIREN);
 		}
 
 		if (m_gameModel.m_totalFoodCount == m_gameModel.m_currentFoodCount) {
@@ -657,7 +696,8 @@ public class PacMan extends Applet {
 		}
 		// Tick the sound manager (mainly to check if the Chomping loop needs to
 		// be stopped)
-		m_soundMgr.tickSound();
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.tickSound();
 	}
 
 	// Ticked when the game is running the intro
@@ -836,7 +876,9 @@ public class PacMan extends Applet {
 
 	public void stop() {
 		m_ticker = null;
-		m_soundMgr.stop();
+		
+		//TODO: REMOVE COMMENT
+		//m_soundMgr.stop();
 	}
 
 	void setTicksPerSec(int ticks) {
@@ -882,7 +924,6 @@ private  void connectMultiplayerGame() {
 		updateSocket = new MulticastSocket(updateListenPort);
 		updateSocket.joinGroup(InetAddress.getByName(group));
 		//initialize the socket over which slave send updates
-		//TODO: MAKE THIS CHANGABLE!!! 
 		//tcpSocket = new Socket(InetAddress.getLocalHost(), listenPort);
 		
 	} catch (IOException e) {

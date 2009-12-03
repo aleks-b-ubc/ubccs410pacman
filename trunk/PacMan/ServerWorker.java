@@ -68,7 +68,6 @@ class ServerWorker implements Runnable {
     	  Thread.sleep(1000/35);
     	  
       	} catch (SocketException e1) {
-			// TODO Auto-generated catch block
 			System.out.println("TCP: client is not alive");
       	} catch (IOException e) {
       		System.out.println("Read failed");
@@ -87,7 +86,7 @@ private void testConnection() {
 			
 	while(!gotAns && (numFail < FAILLIMIT)){		
 		try {
-			responce = 0;
+			responce = -1;
 			//System.out.println("sending");
 			out.write(test);
 			out.flush();

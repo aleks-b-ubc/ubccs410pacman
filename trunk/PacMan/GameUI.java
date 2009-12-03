@@ -247,13 +247,16 @@ private void paintHighScores(Graphics g) {
 	      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
 	      if (m_imagePacman == null)
 	      {
-	         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+	    	//TODO REMOVE COMMENT
+	         //m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
 	      }
 	      
 	      // Draw Logo Image
 	      y = 50;
-	      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
-	      m_offGraphics.drawImage (m_imagePacman, x, y, this);
+	      
+	    //TODO REMOVE COMMENT
+	      //x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+	      //m_offGraphics.drawImage (m_imagePacman, x, y, this);
 	      
 	      m_offGraphics.setFont (m_font);
 	      m_offGraphics.setColor (Color.white);
@@ -296,13 +299,14 @@ public void paintMultiplayer(Graphics g) {
 	      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
 	      if (m_imagePacman == null)
 	      {
-	         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+	    	//TODO REMOVE COMMENT
+	        // m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
 	      }
 	      
 	      // Draw Logo Image
 	      y = 50;
-	      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
-	      m_offGraphics.drawImage (m_imagePacman, x, y, this);
+	      //x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+	      //m_offGraphics.drawImage (m_imagePacman, x, y, this);
 	      
 	      m_offGraphics.setFont (m_font);
 	      m_offGraphics.setColor (Color.white);
@@ -334,11 +338,14 @@ public void paintMultiplayer(Graphics g) {
       m_offGraphics.setColor (Color.black);      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
       if (m_imagePacman == null)
       {
-         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+    	//TODO REMOVE COMMENT
+        //m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
       }      
       // Draw Logo Image
-      y = 50;      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
-      m_offGraphics.drawImage (m_imagePacman, x, y, this);
+      y = 50;
+      
+      //TODO REMOVE COMMENT      //x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+      //m_offGraphics.drawImage (m_imagePacman, x, y, this);
       
       m_offGraphics.setFont (m_Colorfont);      m_offGraphics.setColor (Color.white);
       fm = m_offGraphics.getFontMetrics();
@@ -402,10 +409,13 @@ public void paintMultiplayer(Graphics g) {
       m_offGraphics.setColor (Color.black);      m_offGraphics.fillRect (0, 0, m_offDim.width, m_offDim.height);
       if (m_imagePacman == null)
       {
-         m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
+    	 //TODO: REMOVE comment!
+         //m_imagePacman = m_gameModel.m_pacMan.getImage (m_gameModel.m_pacMan.getCodeBase (), "pacman.jpg");
       }            // Draw Logo Image
-      y = 50;      x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
-            m_offGraphics.drawImage (m_imagePacman, x, y, this);
+      y = 50;
+      
+      //TODO REMOVE COMMENT      //x = (m_offDim.width - m_imagePacman.getWidth (this)) / 2;
+          //TODO REMOVE COMMENTm_offGraphics.drawImage (m_imagePacman, x, y, this);
       
       // Draw Ghosts and PacMan Player
       for (int i =0; i < m_gameModel.m_ghosts.length; i++)
