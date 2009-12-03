@@ -19,6 +19,7 @@ class ServerWorker implements Runnable {
   
   private int timer = 0;
   private int timerLimit = 35;
+  private boolean threadRun = true;
 
   
   ServerWorker(Socket client, ServerNode serverNode, int ghostID) {
@@ -41,7 +42,7 @@ class ServerWorker implements Runnable {
   public void run(){
     byte b;
 
-    while(true){  
+    while(threadRun){  
       try{
     	  //will keep track of inactivities. After a second if not reading anything
     	  //in we will test connection. If during that time ANYTHING comes in
@@ -87,7 +88,7 @@ private void testConnection() {
 	while(!gotAns && (numFail < FAILLIMIT)){		
 		try {
 			responce = 0;
-			System.out.println("sending");
+			//System.out.println("sending");
 			out.write(test);
 			out.flush();
 			
@@ -110,7 +111,10 @@ private void testConnection() {
 		else{			
 			numFail++;
 			if(numFail >= FAILLIMIT){
+				System.out.println("CLIENTFAIL");
 				clientFailed = true;
+				serverNode.clientFail(ghostID);
+				threadRun = false;
 			}
 		}		
 	}
