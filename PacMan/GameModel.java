@@ -349,7 +349,52 @@ public class GameModel implements Serializable{
 		return new GhostAI(this, Thing.GHOST, ghost.m_startX, ghost.m_startY, ghost.m_bMiddle,
 				ghost.m_color, ghost.m_nExitMilliSec);
 	}
-	
+	public GhostAI ghostPlayerToAI2(Ghost ghost){
+		GhostAI ghostAI = new GhostAI(this, Thing.GHOST, ghost.m_startX, ghost.m_startY, ghost.m_bMiddle,
+				ghost.m_color, ghost.m_nExitMilliSec);
+		ghostAI.m_lastDeltaLocX= ghost.m_lastDeltaLocX;
+		ghostAI.m_lastDeltaLocY= ghost.m_lastDeltaLocY;
+		ghostAI.m_locX= ghost.m_locX;
+		ghostAI.m_locY= ghost.m_locY;
+		
+		ghostAI.m_bCanBackTrack = ghost.m_bCanBackTrack;
+		ghostAI.m_bCanFollow = ghost.m_bCanFollow;
+		ghostAI.m_bCanPredict = ghost.m_bCanPredict;
+		ghostAI.m_bCanUseNextBest = ghost.m_bCanUseNextBest;
+		ghostAI.m_bEaten = ghost.m_bEaten;
+		ghostAI.m_bEnteringDoor = ghost.m_bEnteringDoor;
+		ghostAI.m_bInsaneAI = ghost.m_bInsaneAI;
+		ghostAI.m_bOtherPolygon = ghost.m_bOtherPolygon;
+		ghostAI.m_destinationX = ghost.m_destinationX;
+		ghostAI.m_destinationY = ghost.m_destinationY;
+		ghostAI.m_eatenPoints = ghost.m_eatenPoints;
+		ghostAI.m_ghostDeltaMax = ghost.m_ghostDeltaMax;
+		ghostAI.m_ghostMouthX = ghost.m_ghostMouthX;
+		ghostAI.m_ghostMouthY = ghost.m_ghostMouthY;
+		ghostAI.m_lastDirection = ghost.m_lastDirection;
+		ghostAI.m_nExitMilliSec = ghost.m_nExitMilliSec;
+		ghostAI.m_nTicks2Exit = ghost.m_nTicks2Exit;
+		ghostAI.m_nTicks2Flee = ghost.m_nTicks2Flee;
+		ghostAI.m_nTicks2Popup = ghost.m_nTicks2Popup;
+		
+		ghostAI.m_bPaused = ghost.m_bPaused;
+		ghostAI.m_bInsideRoom = ghost.m_bInsideRoom;
+		ghostAI.m_bVisible = ghost.m_bVisible;
+		ghostAI.m_deltaLocX = ghost.m_deltaLocX;
+		ghostAI.m_deltaLocY = ghost.m_deltaLocY;
+		ghostAI.m_deltaStartX = ghost.m_deltaStartX;
+		ghostAI.m_direction = ghost.m_direction;
+		ghostAI.m_lastDeltaLocX = ghost.m_lastDeltaLocX;
+		ghostAI.m_lastDeltaLocY = ghost.m_lastDeltaLocY;
+		ghostAI.m_lastLocX = ghost.m_locX;
+		ghostAI.m_lastLocY = ghost.m_locY;
+		ghostAI.m_locX = ghost.m_locX;
+		ghostAI.m_locY = ghost.m_locY;
+		ghostAI.m_startX = ghost.m_startX;
+		ghostAI.m_startY = ghost.m_startY;	
+		
+		return ghostAI;
+	}
 	// Called to reinitialize the game state and start a new game
 	public void newGame() {
 

@@ -34,7 +34,9 @@ class GhostAI extends Ghost
          {
             m_gameModel.setPausedGame (false);      
             m_gameModel.m_player.setVisible (true);
-            m_gameModel.m_pacMan.m_soundMgr.playSound (SoundManager.SOUND_RETURNGHOST);
+            
+          //TODO REMOVE COMMENT
+          // m_gameModel.m_pacMan.m_soundMgr.playSound (SoundManager.SOUND_RETURNGHOST);
          }
       }
          

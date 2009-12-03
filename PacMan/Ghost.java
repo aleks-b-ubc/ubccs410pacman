@@ -2,6 +2,7 @@ import java.awt.*;
 
 
 public class Ghost extends Thing{
+	byte m_type;
 	byte     m_requestedDirection = STILL;
 	 int[]    m_ghostMouthX;    // X points of Ghost's crooked mouth when Pacman powersup
 	   int[]    m_ghostMouthY;    // Y points of Ghost's crooked mouth when Pacman powersup
@@ -29,7 +30,9 @@ public class Ghost extends Thing{
 	   boolean  m_bInsaneAI          = false;   // No holds barred!
 	Ghost(GameModel gameModel, byte type, int startX, int startY,
 			boolean middleX) {
+		
 		super(gameModel, type, startX, startY, middleX);
+		m_type = type;
 		// TODO Auto-generated constructor stub
 	}
 	

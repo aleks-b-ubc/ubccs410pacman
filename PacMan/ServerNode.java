@@ -96,7 +96,10 @@ public class ServerNode extends Node {
 		}
 	}
 	
-	public void clientFail(int ghostID){
-		m_gameModel.ghostPlayerToAI(m_gameModel.m_ghosts[ghostID]);
+	public synchronized void clientFail(int ghostID){
+		m_gameModel.m_ghosts[ghostID]=m_gameModel.ghostPlayerToAI2(m_gameModel.m_ghosts[ghostID]);
+		System.out.println("ghostchange" + ghostID + m_gameModel.m_ghosts[ghostID].m_type);
+		m_gameModel.fillThingArray();
+		
 	}
 }
