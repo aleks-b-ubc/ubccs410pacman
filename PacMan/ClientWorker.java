@@ -61,6 +61,7 @@ public class ClientWorker implements Runnable{
 					out.write(test);
 					out.flush();
 				} catch (IOException e) {
+					System.out.println("SERVERFAILLLLLL");
 					serverFailed = true;
 				}
 		   }

@@ -94,6 +94,9 @@ public class ServerNode extends Node {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+	}
+	
+	public void clientFail(int ghostID){
+		m_gameModel.ghostPlayerToAI(m_gameModel.m_ghosts[ghostID]);
 	}
 }

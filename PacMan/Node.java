@@ -3,6 +3,7 @@ import java.util.Enumeration;
 
 
 public class Node {
+	int thingID;
 long id;
 String ip;
 boolean coord=false;
