@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="lib" path="/Users/alfredloh/Documents/workspace/PacMan5/trunk/PacMan/fest-assert-1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/alfredloh/Documents/workspace/PacMan5/trunk/PacMan/fest-swing-1.2a3.jar"/>
-	<classpathentry kind="lib" path="/Users/alfredloh/Documents/workspace/PacMan5/trunk/PacMan/fest-util-1.1.jar"/>
-	<classpathentry kind="lib" path="/Users/alfredloh/Documents/workspace/PacMan5/trunk/PacMan/junit-4.8.jar"/>
+	<classpathentry kind="lib" path="./trunk/PacMan//fest-assert-1.2.jar"/>
+	<classpathentry kind="lib" path="./trunk/PacMan//fest-swing-1.2a3.jar"/>
+	<classpathentry kind="lib" path="./trunk/PacMan//fest-util-1.1.jar"/>
+	<classpathentry kind="lib" path="./trunk/PacMan//junit-4.8.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
