@@ -38,6 +38,7 @@ public class GameUI extends Canvas
    String	   portNumber;
       Image       m_imagePacman;       // One and only image of "Pac-Man" banner with litte guy
       // Variables associated with the intro page   boolean     m_bShowIntro      = true;
+   boolean     m_seeIntroScreen  = false;
    Color pacmanColour = Color.yellow; //This is the default color for packman   
    
    GameUI (PacMan pacMan, GameModel gameModel, HighScoresModel scoresModel, int width, int height) 
@@ -457,7 +458,7 @@ public void paintMultiplayer(Graphics g) {
       m_offGraphics.drawString ("Written by Benny Chow, 2001", x ,y);
       
       // Blitz buffer to screen
-      g.drawImage (m_offImage, 0, 0, this);    }
+      m_seeIntroScreen = g.drawImage (m_offImage, 0, 0, this);    }
       // This method is used to pad a string to a desired   // length by appending periods.  Used in coming up   // with the ghost name strings in the intro.
    public String padString (Graphics g, String stuff, int length)
    {      FontMetrics fm = g.getFontMetrics();      while (fm.stringWidth (stuff) < length)      {         stuff += ".";      }      return stuff;

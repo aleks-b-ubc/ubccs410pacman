@@ -4,6 +4,8 @@ import java.util.*;
 class TopCanvas extends Canvas{
 	Font        m_font;   GameModel   m_gameModel;      Image       m_offImage;
    Graphics    m_offGraphics;   Dimension   m_offDim;
+   
+   boolean     m_seeScore = false;
 
 	public TopCanvas (GameModel gameModel, int width, int height)   {
       super ();      setSize (width, height);
@@ -40,7 +42,7 @@ class TopCanvas extends Canvas{
       y += fm.getAscent () + fm.getDescent ();       x = fm.stringWidth ("HIGH SCORE") - fm.stringWidth (Integer.toString (m_gameModel.m_highScore));      m_offGraphics.drawString (Integer.toString (m_gameModel.m_highScore), x, y);      
       // SCORE      y += 10 + fm.getAscent() + fm.getDescent();       x = fm.stringWidth ("HIGH SCORE") - fm.stringWidth ("SCORE");      m_offGraphics.drawString ("SCORE", x, y);            y += fm.getAscent() + fm.getDescent();       x = fm.stringWidth ("HIGH SCORE") - fm.stringWidth (Integer.toString (m_gameModel.m_player.m_score));      m_offGraphics.drawString (Integer.toString (m_gameModel.m_player.m_score), x, y);
 
-      g.drawImage(m_offImage, 0, 0, this);
+      m_seeScore = g.drawImage(m_offImage, 0, 0, this);
 	}
 }
 

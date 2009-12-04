@@ -29,6 +29,8 @@ public class PacMan extends Applet {
 	int m_globalTickCount = 0;
 
 	int m_ticksPerSec; // These two variables control game speed	int m_delay; // Milliseconds between ticks
+	
+	boolean testing = false;
 
 	// int name = Integer.parseInt(getParameter("name"));
 	boolean netMultiplayer; // This is for keeping track if
@@ -105,9 +107,11 @@ public class PacMan extends Applet {
 
 		validate();
 		
-		//TODO: REMOVE COMMENT
-		//m_soundMgr = new SoundManager(this, getCodeBase());
-		//m_soundMgr.loadSoundClips();
+		if(!testing)
+		{
+		m_soundMgr = new SoundManager(this, getCodeBase());
+		m_soundMgr.loadSoundClips();
+		}
 
 	}
 
