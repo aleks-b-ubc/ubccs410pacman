@@ -38,8 +38,9 @@ public class UserStoriesTest extends TestCase {
 		**/
 		
 		p1 = new PacMan();
-		p1.init();
 		p1.testing = true;
+		p1.init();
+
 		
 		AppletViewer viewer = AppletLauncher.applet(p1).start();
 		
@@ -90,9 +91,6 @@ public class UserStoriesTest extends TestCase {
 		p1.m_gameModel.m_nLives = 0;
 		p1.m_gameModel.m_state = GameModel.STATE_DEADPACMAN;
 		p1.tick();
-		
-		System.out.println(ticksStageZero);
-		System.out.println(p1.m_delay);
 		
 		p1.m_gameModel.m_stage = 1;
 		p1.m_gameModel.loadNextLevel();

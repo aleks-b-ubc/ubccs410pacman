@@ -107,10 +107,9 @@ public class PacMan extends Applet {
 
 		validate();
 		
-		if(!testing)
-		{
 		m_soundMgr = new SoundManager(this, getCodeBase());
-		m_soundMgr.loadSoundClips();
+		if( !testing) {
+			m_soundMgr.loadSoundClips();
 		}
 
 	}
@@ -895,6 +894,27 @@ public class PacMan extends Applet {
 			m_gameModel.m_ghosts[i].m_bInsaneAI = !m_gameModel.m_ghosts[i].m_bInsaneAI;
 		}
 	}
+	
+	public URL getCodeBase()
+	{
+		if( !testing )
+		{
+			return this.getCodeBase();
+		}
+		else
+		{
+			URL url = null;
+			try {
+				url = new URL("http://code.google.com/p/ubccs410pacman/source/browse/#svn/trunk/PacMan");
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return url;
+		}
+	}
+
+
 
 	/*
 	 * Can't run Pacman as an application since it use sound-related methods.
