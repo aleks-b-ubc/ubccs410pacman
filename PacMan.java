@@ -897,6 +897,7 @@ public class PacMan extends Applet {
 		}
 	}
 	
+	/*
 	public URL getCodeBase()
 	{
 		if( !testing )
@@ -915,7 +916,7 @@ public class PacMan extends Applet {
 			return url;
 		}
 	}
-
+*/
 
 
 	/*
